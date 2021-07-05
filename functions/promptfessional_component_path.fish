@@ -56,13 +56,17 @@ function promptfessional_component_path
 	set -l color (promptfessional color component.path.current)
 	__promptfessional_component_path__push "$color$dirs[-1]"
 	
+	# Cache color variables.
+	set -l color (promptfessional color component.path)
+	set -l color_reset (set_color normal)
+	set color_reset "$color_reset$__promptfessional_current_section_color$path_color"
+
 	# Print the path.
-	promptfessional color component.path
 	set -l i
 	set -l deco
+	printf "%s" "$color"
 	for i in (seq 1 (count $rendered_segment))
 		if [ -n "$deco" ]
-			promptfessional color component.path
 			printf " "
 		end
 		
@@ -73,7 +77,7 @@ function promptfessional_component_path
 		# If there's a decoration, render that.
 		set deco "$rendered_segment_decoration[$i]"
 		if [ -n "$deco" ]
-			printf " %s" "$deco"
+			printf "%s %s%s" "$color_reset" "$deco" "$color_reset"
 		end
 	end
 end
@@ -108,7 +112,7 @@ function __promptfessional_component_path__push --no-scope-shadowing
 		# If the decoration string isn't empty, append the path color to the end.
 		if [ -n "$deco_str" ]
 			set -l path_color (promptfessional color component.path)
-			set deco_str "$deco_str$__promptfessional_current_section_color$path_color"
+			set deco_str "$deco_str"
 		end
 		
 		# Add the decoration string to the segment array.
