@@ -1,7 +1,8 @@
 # Default theme for promptfessional.
 #
 # Themes:
-#   dark :: For dark terminals.
+#   dark   :: For dark terminals.
+#   light  :: For light terminals.
 function __promptfessional_theme
     argparse 'default' -- $argv
     set -l set "--set"
@@ -33,9 +34,32 @@ function __promptfessional_theme
 		promptfessional color "$set" component.path.current 'ffffff' --bold
 		
 		# Git
-		promptfessional color "$set" git.clean --background='00ff00' 'ffffff'
-		promptfessional color "$set" git.dirty --background='00ff00' 'ffffff'
-		promptfessional color "$set" git.staged --background='ff9900' 'ffffff'
-		promptfessional color "$set" git.unstaged --background='ff0000' 'ffffff'
+		promptfessional color "$set" git.clean --background='00dd00' 'ffffff'
+		promptfessional color "$set" git.dirty --background='00dd00' 'ffffff'
+		promptfessional color "$set" git.staged --background='dd7700' 'ffffff'
+		promptfessional color "$set" git.unstaged --background='dd0000' 'ffffff'
+
+	case "light"
+
+		# Sections
+		promptfessional color "$set" section.status --background='999'
+		promptfessional color "$set" section.path --background='eeeeee'
+	
+		# Status
+		promptfessional color "$set" component.jobs '0066aa'
+		promptfessional color "$set" component.sudo '009900' --bold
+		promptfessional color "$set" component.status.error 'ff0000' --bold
+		promptfessional color "$set" component.status.ok 'normal'
+		
+		# Path
+		promptfessional color "$set" component.path '666666'
+		promptfessional color "$set" component.path.current '333333' --bold
+		
+		# Git
+		promptfessional color "$set" git.clean --background='00dd00' 'ffffff'
+		promptfessional color "$set" git.dirty --background='00dd00' 'ffffff'
+		promptfessional color "$set" git.staged --background='dd7700' 'ffffff'
+		promptfessional color "$set" git.unstaged --background='dd0000' 'ffffff'
+
 	end
 end
