@@ -29,6 +29,7 @@ The color is chosen in this priority:
 |`--git-symbol-branch`|`⎇ `|Changes the symbol used to represent a branch.|
 |`--git-symbol-staged`|`~`|Changes the symbol used to represent staged changes.|
 |`--git-symbol-unstaged`|`*`|Changes the symbol used to represent unstaged changes.|
+|`--git-use-cache`|false|Enables experimental caching support for a faster prompt.|
 
 ## Colors
 
@@ -38,3 +39,9 @@ The color is chosen in this priority:
 |git.dirty|Used when there are untracked files.|
 |git.staged|Used when there are staged but uncommitted changes.|
 |git.unstaged|Used when there are modified but unstaged changes.|
+
+## Caching
+
+Fetching the status of a large git repository can take quite a bit of time, unfortunately. Promptfessional has *experimental* support (via the `--git-use-cache` option) for caching the git status to speed up the prompt.
+
+This functionality relies on the filesystem recursively updating the modification date of parent directories whenever a file or directory is modified. If your filesystem does not support this, **do not enable this option**.
