@@ -44,9 +44,17 @@ function __promptfessional_end_section --description "Prints the current section
 
     set -l delimiter "$reset$color$__promptfessional_current_section_delimiter"
     set -l text (string join "$delimiter" -- $__promptfessional_current_section_parts)
+    set -l text_no_ansi (string replace --all --regex "\x1B(?:\[[\d;]*[a-zA-Z]|\(B)" "" "$text")
+    set -l pattern "$__promptfessional_current_section_pattern"
 
+    # If the pattern ends with a space and the section ends with a space, don't print the last pattern space.
+    if [ (string sub --start=-1 "$pattern") = " " ] \
+    && [ (string sub --start=-1 "$text_no_ansi") = " " ]
+		set pattern (string sub --length=(math (string length "$pattern") - 1) "$pattern")
+	end
+    
     # Print the section.
-    set -l pattern "$color"(string replace "%s" "%s$color" "$__promptfessional_current_section_pattern")
+    set -l pattern "$color"(string replace "%s" "%s$color" "$pattern")
     printf "$pattern" "$text"
 
     # Clear the section data.

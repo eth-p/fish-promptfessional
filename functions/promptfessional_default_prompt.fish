@@ -4,7 +4,7 @@ function promptfessional_default_prompt
         promptfessional show jobs
         promptfessional show sudo
 
-    promptfessional section path --pattern=' %s'
+    promptfessional section path --pattern=' %s '
         promptfessional show path \
         	--collapse-home \
         	--abbrev-parents \

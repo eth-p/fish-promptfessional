@@ -41,3 +41,7 @@ Sections can be individually colored with the color `section.[SECTION_NAME]`.
 > ```fish
 > promptfessional color --set section.foo --background=red
 > ```
+
+## Special Considerations
+
+- If the `--pattern` ends with a space and the last component ends with a space, only one trailing space will be printed.
