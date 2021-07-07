@@ -59,7 +59,6 @@ function promptfessional_decoration_git
 	if $git_staged; printf "%s" "$_flag_git_symbol_staged"; end
 	printf " "
     
-    # Apply padding.
     return 0
 end
 
@@ -98,7 +97,7 @@ function __promptfessional_git_info --no-scope-shadowing
 			return 0
 		end
 	end
-	
+
 	# Determine the status of the worktree.
 	while read -l __git_file_status
 		switch $__git_file_status
@@ -106,15 +105,15 @@ function __promptfessional_git_info --no-scope-shadowing
 			set git_conflict true
 		case "\?\?"
 			set git_dirty true
-		case "??"
-			set git_staged true
-			set git_unstaged true
 		case "? "
 			set git_staged true
 		case " ?"
 			set git_unstaged true
+		case "??"
+			set git_staged true
+			set git_unstaged true
 		end
-	end < (git -C $argv[1] status -s | sed 's/ [^ ].*$//' | psub)
+	end < (git -C $argv[1] status -s | sed 's/^\(..\) [^ ].*$/\1/' | psub)
 
 	# If the cache is enabled, update the cache.
 	if [ "$argv[2]" = "--git-use-cache" ]
