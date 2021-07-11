@@ -46,6 +46,7 @@ Don't like the default prompt? That's ok, you can customize it however you like.
 function fish_prompt
     promptfessional section status --delimiter=' '
         promptfessional show status
+        promptfessional show private
         promptfessional show jobs
         promptfessional show sudo
 
@@ -66,6 +67,7 @@ When you call `promptfessional section [name]`, you're creating a new prompt sec
 
 For the "status" section above, you can see that it's made up of three components:
 - `status`, which shows the exit code of the last command.
+- `private`, which shows you when the shell was started with `--private`.
 - `jobs`, which shows you if any background jobs are running.
 - `sudo`, which shows you if you're running a root shell.
 
@@ -100,6 +102,7 @@ Check out the documentation for built-in components:
 - [sudo](docs/component_sudo.md)
 - [jobs](docs/component_jobs.md)
 - [path](docs/component_path.md)
+- [private](docs/component_private.md)
 
 ### Path Decorations
 

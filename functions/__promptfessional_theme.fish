@@ -26,6 +26,7 @@ function __promptfessional_theme
 		# Status
 		promptfessional color "$set" component.jobs '0066aa'
 		promptfessional color "$set" component.sudo '009900' --bold
+		promptfessional color "$set" component.private '333333'
 		promptfessional color "$set" component.status.error 'ff0000' --bold
 		promptfessional color "$set" component.status.ok 'normal'
 		
@@ -48,6 +49,7 @@ function __promptfessional_theme
 		# Status
 		promptfessional color "$set" component.jobs '0066aa'
 		promptfessional color "$set" component.sudo '009900' --bold
+		promptfessional color "$set" component.private 'cccccc'
 		promptfessional color "$set" component.status.error 'ff0000' --bold
 		promptfessional color "$set" component.status.ok 'normal'
 		

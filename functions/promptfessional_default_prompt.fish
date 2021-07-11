@@ -1,6 +1,7 @@
 function promptfessional_default_prompt
     promptfessional section status --delimiter=' '
         promptfessional show status
+        promptfessional show private
         promptfessional show jobs
         promptfessional show sudo
 
