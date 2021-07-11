@@ -16,14 +16,15 @@ function promptfessional_component_path
     
     # Get the current directory.
     set -l pwd (pwd)
+    set -l display_pwd "$pwd"
     
     # If '--collapse-home' is passed, replace "$HOME/" with ~/
     if [ -n "$_flag_collapse_home" ]
     	set -l pwd_starts (string sub --length=(math (string length "$HOME") + 1) -- "$pwd")
     	if [ "$pwd_starts" = "$HOME" ]
-    		set pwd "~"
+    		set display_pwd "~"
     	else if [ "$pwd_starts" = "$HOME/" ]
-    		set pwd "~/"(string sub --start=(math (string length "$HOME") + 2) -- "$pwd")
+    		set display_pwd "~/"(string sub --start=(math (string length "$HOME") + 2) -- "$pwd")
     	end
     end
     
@@ -32,13 +33,25 @@ function promptfessional_component_path
 	[ -n "$_flag_abbrev_parents" ] && set render_parent __promptfessional_component_path__render_parent_abbreviated
     
     # Walk through the path.
-    set -l dirs (string split -- '/' "$pwd")
+    set -l dirs (string split -- '/' "$display_pwd")
 	set -l dir_path "/"
+	set -l first_separator ""
 	set -l rendered_segment
 	set -l rendered_segment_decoration
 	
-	if [ "$dirs[1]" = "~" ]
-		set dir_path "$HOME"
+	switch "$dirs[1]"
+		case "~"
+			set dir_path "$HOME"
+			set first_separator "/"
+			
+		case "" # If it's empty, our first directory is `/`.
+			set dirs[1] "/"
+	end
+	
+	# If the topmost directory is empty, we're dealing with a pwd ending with a slash.
+	# This should be removed.
+	if [ "$dirs[-1]" = "" ]
+		set dirs $dirs[1..-2]
 	end
 
 	# Render the parents.
@@ -55,11 +68,12 @@ function promptfessional_component_path
 	end
 		
 	# Render the current directory.
-	if [ -w (pwd) ]
+	if [ -w "$pwd" ]
 		set color (promptfessional color component.path.current)
 	else
 		set color (promptfessional color component.path.current.ro --or component.path.current)
 	end
+	
 	__promptfessional_component_path__push "$color$dirs[-1]"
 	
 	# Cache color variables.
@@ -77,7 +91,7 @@ function promptfessional_component_path
 		end
 		
 		# Print the current segment.
-		[ $i -eq 1 ] || printf "/"
+		[ $i -eq 1 ] || printf "$first_separator"
 		printf "%s" "$rendered_segment[$i]"
 		
 		# If there's a decoration, render that.
