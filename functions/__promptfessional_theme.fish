@@ -33,6 +33,7 @@ function __promptfessional_theme
 		# Path
 		promptfessional color "$set" component.path '999999'
 		promptfessional color "$set" component.path.current 'ffffff' --bold
+		promptfessional color "$set" component.path.current.ro 'ff9999' --bold
 		
 		# Git
 		promptfessional color "$set" git.clean --background='00dd00' 'ffffff'
@@ -56,6 +57,7 @@ function __promptfessional_theme
 		# Path
 		promptfessional color "$set" component.path '666666'
 		promptfessional color "$set" component.path.current '333333' --bold
+		promptfessional color "$set" component.path.current.ro 'ff3333' --bold
 		
 		# Git
 		promptfessional color "$set" git.clean --background='00dd00' 'ffffff'

@@ -6,11 +6,13 @@
 #   --collapse-home   :: Replaces "$HOME" with "~".
 #
 # Colors:
-#   component.path          :: Used for parent directories.
-#   component.path.current  :: Used for the current directory.
+#   component.path             :: Used for parent directories.
+#   component.path.current     :: Used for the current directory.
+#   component.path.current.ro  :: Used for the current directory when the user doesn't have write permissions.
 function promptfessional_component_path
     argparse -i 'decoration=' 'collapse-home' 'abbrev-parents' -- $argv
     set -l deco_args $argv
+    set -l color ''
     
     # Get the current directory.
     set -l pwd (pwd)
@@ -53,7 +55,11 @@ function promptfessional_component_path
 	end
 		
 	# Render the current directory.
-	set -l color (promptfessional color component.path.current)
+	if [ -w (pwd) ]
+		set color (promptfessional color component.path.current)
+	else
+		set color (promptfessional color component.path.current.ro --or component.path.current)
+	end
 	__promptfessional_component_path__push "$color$dirs[-1]"
 	
 	# Cache color variables.

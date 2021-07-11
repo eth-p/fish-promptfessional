@@ -23,6 +23,7 @@ Displays the path to the current directory.
 |:--|:--|
 |component.path|The color of parent directories.|
 |component.path.current|The color of the current directory.|
+|component.path.current.ro|The color of the current directory, when the user doesn't have write permission.|
 
 ## Decorations
 
