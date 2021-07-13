@@ -102,6 +102,7 @@ Check out the documentation for built-in components:
 - [sudo](docs/component_sudo.md)
 - [jobs](docs/component_jobs.md)
 - [path](docs/component_path.md)
+- [path_permission](docs/component_path_permission.md)
 - [private](docs/component_private.md)
 
 ### Path Decorations

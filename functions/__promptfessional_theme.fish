@@ -35,6 +35,10 @@ function __promptfessional_theme
 		promptfessional color "$set" component.path.current 'ffffff' --bold
 		promptfessional color "$set" component.path.current.ro 'ff9999' --bold
 		
+		promptfessional color "$set" component.path_permission '999999'
+		promptfessional color "$set" component.path_permission.no_read 'ff0000' --bold
+		promptfessional color "$set" component.path_permission.no_write 'cc0000'
+		
 		# Git
 		promptfessional color "$set" git.clean --background='00dd00' 'ffffff'
 		promptfessional color "$set" git.dirty --background='00dd00' 'ffffff'
@@ -58,6 +62,10 @@ function __promptfessional_theme
 		promptfessional color "$set" component.path '666666'
 		promptfessional color "$set" component.path.current '333333' --bold
 		promptfessional color "$set" component.path.current.ro 'ff3333' --bold
+		
+		promptfessional color "$set" component.path_permission '999999'
+		promptfessional color "$set" component.path_permission.no_read 'ff0000' --bold
+		promptfessional color "$set" component.path_permission.no_write '660000'
 		
 		# Git
 		promptfessional color "$set" git.clean --background='00dd00' 'ffffff'
