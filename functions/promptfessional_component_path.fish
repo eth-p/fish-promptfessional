@@ -79,7 +79,7 @@ function promptfessional_component_path
 	# Cache color variables.
 	set -l color (promptfessional color component.path)
 	set -l color_reset (set_color normal)
-	set color_reset "$color_reset$__promptfessional_current_section_color$path_color"
+	set color_reset (printf "%s%s%s" "$color_reset" (promptfessional section --current-color) "$path_color")
 
 	# Print the path.
 	set -l i

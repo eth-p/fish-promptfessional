@@ -28,11 +28,14 @@ function promptfessional
     return $status
 end
 
+# Ends the current section, printing its components.
 function __promptfessional_end
   __promptfessional_end_section
   set_color normal
 end
 
+# INTERNAL:
+# Joins together all the rendered components and prints them.
 function __promptfessional_end_section --description "Prints the current section."
     if [ -z "$__promptfessional_current_section" ] || [ (count $__promptfessional_current_section_parts) -eq 0 ]
         return 1
@@ -61,13 +64,25 @@ function __promptfessional_end_section --description "Prints the current section
     set __promptfessional_current_section ''
 end
 
-function __promptfessional_section
+# Declares the start of a prompt section.
+# This will implicitly end the previous prompt section, if there is one.
+function __promptfessional_section --description "Declares the start of a prompt section."
+    argparse 'pattern=' 'delimiter=' 'current-color' -- $argv
+
+	# Argument: --get-color
+	if [ -n "$_flag_current_color" ]
+		printf "%s" "$__promptfessional_current_section_color"
+		return 0
+	end
+
+	# Set the default colors and end the previous section.
 	__promptfessional_theme --default dark
     __promptfessional_end_section
 
-    argparse 'pattern=' 'delimiter=' -- $argv
+    # Default arguments.
     [ -n "$_flag_pattern" ] || set _flag_pattern " %s "
 
+	# Initialize the section.
     set -g __promptfessional_current_section $argv[1]
     set -g __promptfessional_current_section_parts
     set -g __promptfessional_current_section_pattern "$_flag_pattern"

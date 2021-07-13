@@ -9,7 +9,7 @@ Declares the start of a prompt section.
 
 ## Restrictions
 
-- This must eventually be followed by either `promptfessional section`, or `promptfessional end`.  
+- This must eventually be followed by either another `promptfessional section`, or `promptfessional end`.  
   Failure to do so will result in the section not being displayed.
   
 
@@ -24,6 +24,14 @@ promptfessional section my_section
     promptfessional show my_component
     promptfessional show my_other_component
 promptfessional end
+```
+
+Query the current section color:
+
+```fish
+# Prints the current color.
+# This is useful for components which need to reset to a default color.
+promptfessional section --current-color
 ```
 
 ## Options
