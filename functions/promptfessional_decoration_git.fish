@@ -18,7 +18,9 @@ function promptfessional_decoration_git
     	return 1
     end
     
-    argparse -i 'git-hide-branch=+' 'git-branch-symbol=' 'git-use-cache' -- $argv
+    argparse -i 'git-hide-branch=+' 'git-use-cache' \
+    	'git-symbol-branch=' 'git-symbol-staged=' 'git-symbol-unstaged=' \
+    	-- $argv
     
 	# Get info.
 	set -l git_branch "?"
