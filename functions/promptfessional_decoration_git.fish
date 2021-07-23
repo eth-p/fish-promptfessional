@@ -28,7 +28,7 @@ function promptfessional_decoration_git
 	set -l git_dirty false
 	set -l git_staged false
 	set -l git_unstaged false
-	__promptfessional_git_info "$argv[1]" "$_flag_git_use_cache"
+	__promptfessional_git_info "$argv[1]" "$_flag_git_use_cache" || return 1
 	
 	# If the branch is one of the default branches, don't show the name.
 	set -l branch
@@ -78,7 +78,7 @@ end
 #   git_staged    :: There are staged changes.
 #   git_unstaged  :: There are unstaged modifications or deletions.
 function __promptfessional_git_info --no-scope-shadowing
-	set git_toplevel (git rev-parse --show-toplevel)
+	set git_toplevel (git -C $argv[1] rev-parse --show-toplevel 2>/dev/null) || return 1
 	set git_branch (git -C $argv[1] branch --show-current)
 	set git_conflict false 
 	set git_dirty false
