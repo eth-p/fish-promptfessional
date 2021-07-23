@@ -105,7 +105,16 @@ end
 
 # Renders an abbreviated path item.
 function __promptfessional_component_path__render_parent_abbreviated --no-scope-shadowing
-	__promptfessional_component_path__push (string sub --length=1 -- "$argv[1]")"$argv[2]"
+	# If the path starts with a '.', abbreviate to 2 characters.
+	# Otherwise, abbreviate to 1 character.
+	set -l __abbreviated ""
+	if [ (string sub --length=1 -- "$argv[1]") = "." ]
+		set __abbreviated (string sub --length=2 -- "$argv[1]")
+	else
+		set __abbreviated (string sub --length=1 -- "$argv[1]")
+	end
+	
+	__promptfessional_component_path__push "$__abbreviated$argv[2]"
 end
 
 # Renders a path item.
