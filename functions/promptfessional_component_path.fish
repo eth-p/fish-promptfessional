@@ -58,10 +58,10 @@ function promptfessional_component_path
 	if [ (count $dirs) -gt 1 ]
 		set -l segment $dirs[1]
 		
-		"$render_parent" "$segment"
+		"$render_parent" "$segment" ""
 		for segment in $dirs[2..-2]
 			set dir_path "$dir_path/$segment"
-			"$render_parent" "$segment"
+			"$render_parent" "$segment" "/"
 		end
 		
 		set dir_path "$dir_path/$dirs[-1]"
@@ -104,12 +104,12 @@ end
 
 # Renders an abbreviated path item.
 function __promptfessional_component_path__render_parent_abbreviated --no-scope-shadowing
-	__promptfessional_component_path__push (string sub --length=1 -- "$segment")
+	__promptfessional_component_path__push (string sub --length=1 -- "$argv[1]")"$argv[2]"
 end
 
 # Renders a path item.
 function __promptfessional_component_path__render_parent --no-scope-shadowing
-	__promptfessional_component_path__push "$segment"
+	__promptfessional_component_path__push "$argv[1]$argv[2]"
 end
 
 # Pushes a path to the rendered segment array.
