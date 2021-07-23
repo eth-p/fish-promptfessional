@@ -46,6 +46,7 @@ function promptfessional_component_path
 			
 		case "" # If it's empty, our first directory is `/`.
 			set dirs[1] "/"
+			set dir_path ""
 	end
 	
 	# If the topmost directory is empty, we're dealing with a pwd ending with a slash.
