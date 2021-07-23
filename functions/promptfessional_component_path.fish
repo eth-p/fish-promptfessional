@@ -65,7 +65,7 @@ function promptfessional_component_path
 			"$render_parent" "$segment" "/"
 		end
 		
-		set dir_path "$dir_path/$dirs[-1]"
+		set dir_path "$dir_path$dirs[-1]"
 	end
 		
 	# Render the current directory.
@@ -92,7 +92,7 @@ function promptfessional_component_path
 		end
 		
 		# Print the current segment.
-		[ $i -eq 1 ] || printf "$first_separator"
+		[ $i -eq 2 ] && printf "$first_separator"
 		printf "%s" "$rendered_segment[$i]"
 		
 		# If there's a decoration, render that.
