@@ -40,10 +40,10 @@ function __promptfessional_theme
 		promptfessional color "$set" component.path_permission.no_write 'cc0000'
 		
 		# Git
-		promptfessional color "$set" git.clean --background='00dd00' 'ffffff'
-		promptfessional color "$set" git.dirty --background='00dd00' 'ffffff'
+		promptfessional color "$set" git.clean --background='99cc00' 'ffffff'
+		promptfessional color "$set" git.dirty --background='99cc00' 'ffffff'
 		promptfessional color "$set" git.staged --background='dd7700' 'ffffff'
-		promptfessional color "$set" git.unstaged --background='dd0000' 'ffffff'
+		promptfessional color "$set" git.unstaged --background='bb1100' 'ffffff'
 
 	case "light"
 
