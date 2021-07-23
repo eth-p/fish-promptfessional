@@ -65,7 +65,7 @@ function promptfessional_component_path
 			"$render_parent" "$segment" "/"
 		end
 		
-		set dir_path "$dir_path$dirs[-1]"
+		set dir_path "$dir_path/$dirs[-1]"
 	end
 		
 	# Render the current directory.
