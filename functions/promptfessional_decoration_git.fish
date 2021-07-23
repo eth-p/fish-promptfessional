@@ -11,10 +11,10 @@
 #   --git-long-hash        :: Uses long hashes.
 #
 # Colors:
-#   git.clean     :: Used when the worktree is clean.
-#   git.dirty     :: Used when there are no unstaged changed.
-#   git.staged    :: Used when there are staged but uncomitted changes.
-#   git.unstaged  :: Used when there are modified but unstaged files.
+#   git.clean      :: Used when the worktree is clean.
+#   git.untracked  :: Used when there are untracked files.
+#   git.staged     :: Used when there are staged but uncomitted changes.
+#   git.unstaged   :: Used when there are modified but unstaged files.
 function promptfessional_decoration_git
     if ! [ -e "$argv[1]/.git" ]
     	return 1
@@ -29,7 +29,7 @@ function promptfessional_decoration_git
 	set -l git_head ""
 	set -l git_branch ""
 	set -l git_conflict false 
-	set -l git_dirty false
+	set -l git_untracked false
 	set -l git_staged false
 	set -l git_unstaged false
 	__promptfessional_git_info "$argv[1]" "$_flag_git_use_cache" || return 1
@@ -86,8 +86,8 @@ function promptfessional_decoration_git
     	set color (promptfessional color git.unstaged)
 	else if $git_staged
     	set color (promptfessional color git.staged)
-	else if $git_dirty
-   		set color (promptfessional color git.dirty)
+	else if $git_untracked
+   		set color (promptfessional color git.untracked)
 	else
     	set color (promptfessional color git.clean)
 	end
@@ -108,20 +108,20 @@ end
 #   $2 :: Whether or not to use a cache to speed up this command.
 #
 # Variables:
-#   git_unstaged  :: There are unstaged modifications or deletions.#   git_toplevel    :: The repo directory.
+#   git_toplevel    :: The repo directory.
 #   git_branch      :: The name of the current branch.
-#   git_conflict    :: A file has a merge conflict.
-#   git_dirty     :: The worktree is dirty.
 #   git_head        :: The full commit hash of the HEAD.
 #   git_merge_head  :: The full commit hash of the merge HEAD. (will be empty if not merging)
+#   git_conflict    :: There are files that have merge conflicts.
 #   git_staged      :: There are staged changes.
 #   git_unstaged    :: There are unstaged modifications or deletions.
+#   git_untracked   :: The worktree contains untracked files.
 #   git_is_merging  :: Git is in the middle of a merge operation.
 #   git_is_rebasing :: Git is in the middle of a rebase operation.
 function __promptfessional_git_info --no-scope-shadowing
 	set git_toplevel (git -C "$argv[1]" rev-parse --show-toplevel 2>/dev/null) || return 1
 	set git_conflict false 
-	set git_dirty false
+	set git_untracked false
 	set git_staged false
 	set git_unstaged false
 	set git_merge_head ""
@@ -130,7 +130,7 @@ function __promptfessional_git_info --no-scope-shadowing
 
 	# If the cache is enabled and the key matches, use the cached vars.
 	set -l __git_cachekey ''
-	set -l __git_cachevars "conflict" "dirty" "staged" "unstaged" "head" "branch" "merge_head" "is_rebasing" "is_merging"
+	set -l __git_cachevars "conflict" "untracked" "staged" "unstaged" "head" "branch" "merge_head" "is_rebasing" "is_merging"
 	if [ "$argv[2]" = "--git-use-cache" ]
 		set -l __git_lastmod (stat -c "%Y" . 2>/dev/null || stat -f "%m" .)
 		set __git_cachekey "$git_toplevel:$git_branch:$__git_lastmod"
@@ -163,7 +163,7 @@ function __promptfessional_git_info --no-scope-shadowing
 		case "UU"
 			set git_conflict true
 		case "\?\?"
-			set git_dirty true
+			set git_untracked true
 		case "? "
 			set git_staged true
 		case " ?"

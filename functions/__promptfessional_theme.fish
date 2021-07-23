@@ -41,9 +41,9 @@ function __promptfessional_theme
 		
 		# Git
 		promptfessional color "$set" git.clean --background='99cc00' 'ffffff'
-		promptfessional color "$set" git.dirty --background='99cc00' 'ffffff'
 		promptfessional color "$set" git.staged --background='dd7700' 'ffffff'
 		promptfessional color "$set" git.unstaged --background='bb1100' 'ffffff'
+		promptfessional color "$set" git.untracked --background='99cc00' 'ffffff'
 
 	case "light"
 
@@ -69,9 +69,9 @@ function __promptfessional_theme
 		
 		# Git
 		promptfessional color "$set" git.clean --background='00dd00' 'ffffff'
-		promptfessional color "$set" git.dirty --background='00dd00' 'ffffff'
 		promptfessional color "$set" git.staged --background='dd7700' 'ffffff'
 		promptfessional color "$set" git.unstaged --background='dd0000' 'ffffff'
+		promptfessional color "$set" git.untracked --background='00dd00' 'ffffff'
 
 	end
 end

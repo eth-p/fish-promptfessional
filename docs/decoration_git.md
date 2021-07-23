@@ -18,7 +18,7 @@ The color is chosen in this priority:
 
 1. Unstaged changes (excluding untracked files)? => `git.unstaged`
 2. Staged changes? => `git.staged`
-3. Untracked files? => `git.dirty`
+3. Untracked files? => `git.untracked`
 4. No untracked files, staged changes, or unstaged changes? => `git.clean`
 
 ## Options
@@ -38,9 +38,9 @@ The color is chosen in this priority:
 |Name|Description|
 |:--|:--|
 |git.clean|Used when the worktree is clean.|
-|git.dirty|Used when there are untracked files.|
 |git.staged|Used when there are staged but uncommitted changes.|
 |git.unstaged|Used when there are modified but unstaged changes.|
+|git.untracked|Used when there are untracked files.|
 
 ## Caching
 
