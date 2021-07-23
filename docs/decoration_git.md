@@ -26,7 +26,9 @@ The color is chosen in this priority:
 |Option|Default|Description|
 |:--|:--|:--|
 |`--git-hide-branch`||Hides the branch name if it's equal to this option.|
+|`--git-long-hash`||Uses full commit hashes instead of short hashes. (Not recommended!)|
 |`--git-symbol-branch`|`⎇ `|Changes the symbol used to represent a branch.|
+|`--git-symbol-head`|`➦`|Changes the symbol used to represent a detached head.|
 |`--git-symbol-staged`|`~`|Changes the symbol used to represent staged changes.|
 |`--git-symbol-unstaged`|`*`|Changes the symbol used to represent unstaged changes.|
 |`--git-use-cache`|false|Enables experimental caching support for a faster prompt.|
