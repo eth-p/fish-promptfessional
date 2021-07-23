@@ -9,6 +9,10 @@
 #   --git-symbol-unstaged  :: Changes the symbol used to represent unstaged changes.
 #   --git-use-cache        :: Enables experimental caching support for a faster prompt.
 #   --git-long-hash        :: Uses long hashes.
+#   --git-pattern-merge    :: The pattern to use for a merge operation.
+#   --git-pattern-rebase   :: The pattern to use for a rebase operation.
+#   --git-pattern-detached :: The pattern to use when on a detached head.
+#   --git-pattern-branch   :: The pattern to use when on a branch.
 #
 # Colors:
 #   git.clean      :: Used when the worktree is clean.
@@ -21,6 +25,8 @@ function promptfessional_decoration_git
     end
     
     argparse -i 'git-hide-branch=+' 'git-use-cache' 'git-long-hash' \
+    	'git-pattern-merge=' 'git-pattern-rebase=' \
+    	'git-pattern-detached=' 'git-pattern-branch=' \
     	'git-symbol-branch=' 'git-symbol-head=' \
     	'git-symbol-staged=' 'git-symbol-unstaged=' \
     	-- $argv
@@ -55,29 +61,35 @@ function promptfessional_decoration_git
 	[ -n "$_flag_git_symbol_staged" ] || set _flag_git_symbol_staged "~"
 	[ -n "$_flag_git_symbol_unstaged" ] || set _flag_git_symbol_unstaged "*"
 	
-	# Determine what to print.
-	set -l deco_print
+	# Set default patterns.
+	[ -n "$_flag_git_pattern_branch" ]   || set _flag_git_pattern_branch " {symbol}{branch}{status} "
+	[ -n "$_flag_git_pattern_detached" ] || set _flag_git_pattern_detached " {symbol}{head}{status} "
+	[ -n "$_flag_git_pattern_merge" ]    || set _flag_git_pattern_merge " {symbol}{branch_or_head }merge({merge_head}){status} "
+	[ -n "$_flag_git_pattern_rebase" ]   || set _flag_git_pattern_rebase " {symbol}rebase({head}){status} "
+	
+	# Generate the "{symbol}" and "{branch_or_head}" pattern variables.
+	set -l deco_symbol "$_flag_git_symbol_branch"
+	set -l deco_branch_or_head "$git_branch"
 	if [ -z "$git_branch" ]
-		if "$git_is_rebasing"
-			# If we're rebasing, mention the rebase.
-			set deco_print "$_flag_git_symbol_head""rebase($git_head)"		
-		else
-			# If we just aren't in a branch (e.g. detached HEAD), show the commit hash.
-			set deco_print "$_flag_git_symbol_head$git_head"
-		end
+		set deco_symbol "$_flag_git_symbol_head" 
+		set deco_branch_or_head "$git_head"
+	end
+	
+	# Generate the "{status}" pattern variable.
+	set -l deco_status ""
+	if $git_unstaged; set deco_status "$deco_status$_flag_git_symbol_unstaged"; end
+	if $git_staged;  set deco_status "$deco_status$_flag_git_symbol_staged"; end
+	
+	# Determine the correct pattern.
+	set -l pattern
+	if "$git_is_rebasing"
+		set pattern "$_flag_git_pattern_rebase"
+	else if "$git_is_merging"
+		set pattern "$_flag_git_pattern_merge"
+	else if [ -n "$git_branch" ]
+		set pattern "$_flag_git_pattern_branch"
 	else
-		if "$git_is_merging"
-			# If we're merging, mention the merge.
-			set deco_print "$_flag_git_symbol_branch$deco_branch"
-			if [ -n "$deco_branch" ]
-				set deco_print "$deco_print "
-			end
-			
-			set deco_print "$deco_print""merge($git_merge_head)"	
-		else
-			# If we're in a branch, show the branch.
-			set deco_print "$_flag_git_symbol_branch$deco_branch"
-		end
+		set pattern "$_flag_git_pattern_detached"
 	end
 	
 	# Determine the color.
@@ -92,11 +104,33 @@ function promptfessional_decoration_git
     	set color (promptfessional color git.clean)
 	end
 	
-	# Print git info.
-	printf "%s %s" "$color" "$deco_print"
-	if $git_unstaged; printf "%s" "$_flag_git_symbol_unstaged"; end
-	if $git_staged; printf "%s" "$_flag_git_symbol_staged"; end
-	printf " "
+	# Fill out the pattern.
+	set pattern (string replace --all "{symbol}" "$deco_symbol" -- "$pattern")
+	set pattern (string replace --all "{status}" "$deco_status" -- "$pattern")
+	set pattern (string replace --all "{branch_or_head}" "$deco_branch_or_head" -- "$pattern")
+	set pattern (string replace --all "{branch}" "$deco_branch" -- "$pattern")
+	set pattern (string replace --all "{head}" "$git_head" -- "$pattern")
+	set pattern (string replace --all "{merge_head}" "$git_merge_head" -- "$pattern")
+	set pattern (string replace --all "{color}" "$color" -- "$pattern")
+	
+	if [ -n "$git_branch" ]
+		set pattern (string replace --all "{branch }" "$deco_branch " -- "$pattern")
+		set pattern (string replace --all "{branch:}" "$deco_branch:" -- "$pattern")
+	else
+		set pattern (string replace --all "{branch }" "" -- "$pattern")
+		set pattern (string replace --all "{branch:}" "" -- "$pattern")
+	end
+	
+	if [ -n "$branch_or_head" ]
+		set pattern (string replace --all "{branch_or_head }" "$deco_branch_or_head " -- "$pattern")
+		set pattern (string replace --all "{branch_or_head:}" "$deco_branch_or_head:" -- "$pattern")
+	else
+		set pattern (string replace --all "{branch_or_head }" "" -- "$pattern")
+		set pattern (string replace --all "{branch_or_head:}" "" -- "$pattern")
+	end
+	
+	# Print the pattern.
+	printf "%s%s" "$color" "$pattern"
     
     return 0
 end
