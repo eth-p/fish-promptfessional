@@ -85,6 +85,32 @@ See [docs/custom_component.md](docs/custom_component.md) for custom components.
 
 See [docs/custom_decoration.md](docs/custom_decoration.md) for custom path decorations.
 
+## Advanced Tips
+
+### Powerline Arrows
+
+Promptfessional supports Powerline arrows between prompt sections.
+
+You can enable them by adding this right below your `fish_prompt` function:
+
+```fish
+function fish_prompt
+    promptfessional enable arrow
+    
+    ...
+end
+```
+
+If you want to have an ending arrow, you can use this snippet:
+
+```fish
+function fish_prompt
+    ...
+    
+    set_color (string replace -- "--background=" "" (promptfessional color section.path --or=component.path --only-background --print))
+    promptfessional literal "{arrow}\x1B[0m "
+end
+```
 
 ## Documentation
 
