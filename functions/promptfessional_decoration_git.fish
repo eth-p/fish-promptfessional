@@ -151,7 +151,7 @@ end
 #   git_is_merging  :: Git is in the middle of a merge operation.
 #   git_is_rebasing :: Git is in the middle of a rebase operation.
 function __promptfessional_git_info --no-scope-shadowing
-	set __git_revparsed (git -C "$argv[1]" rev-parse --show-toplevel --git-dir 2>/dev/null) || return 1
+	set __git_revparsed (git -C "$argv[1]" rev-parse --show-toplevel --absolute-git-dir 2>/dev/null) || return 1
 
 	set git_toplevel "$__git_revparsed[1]"
 	set git_gitdir "$__git_revparsed[2]"
