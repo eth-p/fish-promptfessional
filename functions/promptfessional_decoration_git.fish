@@ -153,12 +153,17 @@ end
 #   git_is_merging  :: Git is in the middle of a merge operation.
 #   git_is_rebasing :: Git is in the middle of a rebase operation.
 function __promptfessional_git_info --no-scope-shadowing
-	set git_toplevel (git -C "$argv[1]" rev-parse --show-toplevel 2>/dev/null) || return 1
+	set __git_revparsed (git -C "$argv[1]" rev-parse --show-toplevel --git-dir 2>/dev/null) || return 1
+
+	set git_toplevel "$__git_revparsed[1]"
+	set git_gitdir "$__git_revparsed[2]"
+	set git_head ""
+	set git_branch ""
+	set git_merge_head ""
 	set git_conflict false 
 	set git_untracked false
 	set git_staged false
 	set git_unstaged false
-	set git_merge_head ""
 	set git_is_rebasing false
 	set git_is_merging false
 
@@ -166,8 +171,8 @@ function __promptfessional_git_info --no-scope-shadowing
 	set -l __git_cachekey ''
 	set -l __git_cachevars "conflict" "untracked" "staged" "unstaged" "head" "branch" "merge_head" "is_rebasing" "is_merging"
 	if [ "$argv[2]" = "--git-use-cache" ]
-		set -l __git_lastmod (stat -c "%Y" . 2>/dev/null || stat -f "%m" .)
-		set __git_cachekey "$git_toplevel:$git_branch:$__git_lastmod"
+		set -l __git_lastmod (stat -c "%Y" "$argv[1]" "$git_gitdir" 2>/dev/null || stat -f "%m" "$argv[1]" "$git_gitdir")
+		set __git_cachekey "$git_toplevel:$__git_lastmod"
 		if [ "$__promptfessional_git_cache_key" = "$__git_cachekey" ]
 			set -l key
 			for key in $__git_cachevars
