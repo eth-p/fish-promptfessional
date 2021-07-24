@@ -156,6 +156,19 @@ function __promptfessional_util_ansi_strip --description "Strips ANSI Colors fro
 	return $status
 end
 
+function __promptfessional_util_seq --description "A faster version of the seq command."
+	argparse 'step=' -- $argv
+	
+	set -l start $argv[1]
+	set -l finish $argv[2]
+	[ -n "$_flag_step" ] || set _flag_step 1
+	
+	while [ $start -le $finish ]
+		echo $start
+		set start (math $start + $_flag_step)
+	end
+end
+
 # ----------------------------------------------------------------------------------------------------------------------
 # INTERNAL FUNCTIONS
 # ----------------------------------------------------------------------------------------------------------------------

@@ -97,6 +97,7 @@ Check out the documentation for built-in components:
 - [promptfessional enable](docs/promptfessional_enable.md)
 - [promptfessional section](docs/promptfessional_section.md)
 - [promptfessional util ansi_strip](docs/promptfessional_util_ansi_strip.md)
+- [promptfessional util seq](docs/promptfessional_util_seq.md)
 
 ### Components
 

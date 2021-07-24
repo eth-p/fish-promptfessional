@@ -86,7 +86,7 @@ function promptfessional_component_path
 	set -l i
 	set -l deco
 	printf "%s" "$color"
-	for i in (seq 1 (count $rendered_segment))
+	for i in (promptfessional util seq 1 (count $rendered_segment))
 		if [ -n "$deco" ]
 			printf " "
 		end
