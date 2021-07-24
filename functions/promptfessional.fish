@@ -56,6 +56,42 @@ function __promptfessional_end_section --description "Prints the current section
 		set pattern (string sub --length=(math (string length "$pattern") - 1) "$pattern")
 	end
     
+	# Print the powerline arrow if enabled.
+	if [ -n "$__promptfessional_section_arrow_symbol" ]
+		set -l arrow_color ""
+		
+		# Get the current section's initial background color.
+		# First, we'll try to parse out an ANSI background color escape sequence.
+		set -l text_colors (string replace --regex --all -- "\x1B(?:\(B|\[[128]?m)" "" "$text")
+		set -l matches (string match --regex "^(?:\x1B\[(?:\d)*(?:(4|10)([0-79]|(?:8;(?:5;\d+|(?:2;\d+;\d+;\d+)))))[\d;]*m)+" "$text_colors")
+		if [ $status -eq 0 ]
+			# If we found a background color, we swap it to a foreground color and enter reverse mode.
+			printf "\x1B[7;3%sm" "$matches[-1]"
+		else
+			# If we didn't, let's just use the section background color.
+			set -l arrow_color_name (string replace -- "--background=" "" \
+				(promptfessional color "section.$__promptfessional_current_section" --or "section" --print))
+
+			if [ "$arrow_bg_color" = "normal" ]
+				set arrow_color_name
+			end
+
+			set arrow_color (set_color --reverse $arrow_color_name)
+		end
+
+		# Skip the first arrow, since it's not joining any sections together.
+		if [ "$__promptfessional_section_arrow_begin" = "true" ]
+			set __promptfessional_section_arrow_begin false
+		else
+			# Print the arrow.
+			printf "%s%s%s%s" \
+				"$arrow_color" \
+				"$__promptfessional_section_arrow_lastbg" \
+				"$__promptfessional_section_arrow_symbol" \
+				(set_color normal)
+		end
+	end
+
     # Print the section.
     set -l pattern "$color"(string replace "%s" "%s$color" "$pattern")
     printf "$pattern" "$text"
@@ -103,7 +139,23 @@ function __promptfessional_show
 end
 
 function __promptfessional_literal
-    printf "%s" $argv[1]
+	set -l literal "$argv[1]"
+	set literal (string replace -- "{arrow}" "$__promptfessional_section_arrow_symbol" "$literal")
+
+	printf "%s" "$literal"
+end
+
+# Enables a prompt setting.
+function __promptfessional_enable
+	switch $argv[1]
+		case "arrow"
+			set -g __promptfessional_section_arrow_symbol (printf "\uE0B0")
+			set -g __promptfessional_section_arrow_begin true
+
+		case "*"
+			echo "unknown prompfessional feature: $argv[1]" 1>&2
+			return 1
+	end
 end
 
 # Promptfessional: promptfessional color

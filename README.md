@@ -94,6 +94,7 @@ Check out the documentation for built-in components:
 ### Core
 
 - [promptfessional color](docs/promptfessional_color.md)
+- [promptfessional enable](docs/promptfessional_enable.md)
 - [promptfessional section](docs/promptfessional_section.md)
 
 ### Components
