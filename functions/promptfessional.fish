@@ -1,27 +1,9 @@
-# Promptfessional
+# Promptfessional | Copyright (C) 2021 eth-p
 # Your flexible and highly-customizable fish shell prompt.
 #
-# Usage:
-#   function fish_prompt
-#     promptfessional section status --delimiter=' '
-#       promptfessional show status
-#       promptfessional show jobs
-#       promptfessional show sudo
-#
-#     promptfessional section path --pattern=' %s'
-#       promptfessional show path \
-#         --collapse-home \
-#         --abbrev-parents \
-#         --decoration promptfessional_decoration_git \
-#         --git-hide-branch main \
-#         --git-hide-branch master 
-#         
-#     promptfessional end
-#     promptfessional literal " "
-#   end
-#
-# Configuring Colors:
-#   promptfessional color --set COLOR_NAME --background=BG FG
+# Documentation: https://github.com/eth-p/fish-promptfessional/tree/master/docs
+# Repository:    https://github.com/eth-p/fish-promptfessional
+# Issues:        https://github.com/eth-p/fish-promptfessional/issues
 #   
 function promptfessional
     __promptfessional_"$argv[1]" $argv[2..-1]
