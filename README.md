@@ -135,6 +135,7 @@ Check out the documentation for built-in components:
 - [path](docs/component_path.md)
 - [path_permission](docs/component_path_permission.md)
 - [private](docs/component_private.md)
+- [venv](docs/component_venv.md)
 
 ### Path Decorations
 

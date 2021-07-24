@@ -5,6 +5,9 @@ function promptfessional_default_prompt
         promptfessional show jobs
         promptfessional show sudo
 
+	promptfessional section prompt_venv
+		promptfessional show venv
+
     promptfessional section path --pattern=' %s '
         promptfessional show path \
         	--collapse-home \

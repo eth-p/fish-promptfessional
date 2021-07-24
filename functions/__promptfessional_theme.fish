@@ -29,6 +29,7 @@ function __promptfessional_theme
 		promptfessional color "$set" component.private '333333'
 		promptfessional color "$set" component.status.error 'ff0000' --bold
 		promptfessional color "$set" component.status.ok 'normal'
+		promptfessional color "$set" component.venv ccf --background='4b8bbe'
 		
 		# Path
 		promptfessional color "$set" component.path '999999'
@@ -57,6 +58,7 @@ function __promptfessional_theme
 		promptfessional color "$set" component.private 'cccccc'
 		promptfessional color "$set" component.status.error 'ff0000' --bold
 		promptfessional color "$set" component.status.ok 'normal'
+		promptfessional color "$set" component.venv ccf --background='4b8bbe'
 		
 		# Path
 		promptfessional color "$set" component.path '666666'

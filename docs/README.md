@@ -68,6 +68,7 @@ See [custom_decoration.md](custom_decoration.md) for custom path decorations.
 - [path](component_path.md)
 - [path_permission](component_path_permission.md)
 - [private](component_private.md)
+- [venv](component_venv.md)
 
 ### Path Decorations
 
