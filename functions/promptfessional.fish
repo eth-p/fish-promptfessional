@@ -156,6 +156,59 @@ function __promptfessional_util_ansi_strip --description "Strips ANSI Colors fro
 	return $status
 end
 
+function __promptfessional_util_ansi_extract --description "Extracts ANSI Colors from a string."
+	argparse 'last' 'first' 'foreground' 'background' 'sequences' 'unrendered' -- $argv
+	
+	set -l text $argv[1]
+	set -l regex
+	
+	# Determine which regex to use.
+	if [ -n "$_flag_foreground" ]
+		set regex '\x1B\[(?:\d)*((?:3|9)(?:[0-79]|(?:8;(?:5;\d+|(?:2;\d+;\d+;\d+)))))[\d;]*m'
+	else if [ -n "$_flag_background" ]
+		set regex '\x1B\[(?:\d)*((?:4|10)(?:[0-79]|(?:8;(?:5;\d+|(?:2;\d+;\d+;\d+)))))[\d;]*m'
+	else if [ -n "$_flag_sequences" ]
+		set regex '((?:\x1B(?:\[[0-9;]*m|\(B))+)'
+	else
+		echo "promptfessional util ansi_extract: requires --foreground or --background" 1>&2
+		return 2
+	end
+	
+	# Determine whether to get the first or last match.
+	if [ -n "$_flag_first" ]
+		set regex "^.*?$regex"
+	else if [ -n "$_flag_last" ]
+		set regex "^.*$regex"
+	else
+		echo "promptfessional util ansi_extract: requires --first or --last" 1>&2
+		return 2
+	end
+	
+	# Perform the match.
+	set -l matches (string match --regex -- "$regex" "$text")
+	if [ $status -ne 0 ]
+		return 1
+	end
+	
+	# Print the result.
+	if [ -n "$_flag_sequences" ]
+		if [ -n "$_flag_unrendered" ]
+			printf "%s" (string replace -- (printf "\x1B") "\\x1B" "$matches[2]")
+		else
+			printf "%s" "$matches[2]"
+		end
+	else
+		if [ -n "$_flag_unrendered" ]
+			printf "%s" "$matches[2]"
+		else
+			printf "\x1B[%sm" "$matches[2]"
+		end
+	end
+	
+	return 0
+end
+
+
 function __promptfessional_util_seq --description "A faster version of the seq command."
 	argparse 'step=' -- $argv
 	
@@ -232,11 +285,16 @@ function __promptfessional_end_section --description "Prints the current section
 		
 		# Get the current section's initial background color.
 		# First, we'll try to parse out an ANSI background color escape sequence.
-		set -l text_colors (string replace --regex --all -- "\x1B(?:\(B|\[[128]?m)" "" "$text")
-		set -l matches (string match --regex "^(?:\x1B\[(?:\d)*(?:(4|10)([0-79]|(?:8;(?:5;\d+|(?:2;\d+;\d+;\d+)))))[\d;]*m)+" "$text_colors")
+		set -l text_background (promptfessional util ansi_extract "$text" --first --background --unrendered)
 		if [ $status -eq 0 ]
 			# If we found a background color, we swap it to a foreground color and enter reverse mode.
-			printf "\x1B[7;3%sm" "$matches[-1]"
+			switch "$text_background"
+				case "4*"
+					set arrow_color (printf "\x1B[7;3%sm" (string sub --start=2 -- "$text_background"))
+					
+				case "10*"
+					set arrow_color (printf "\x1B[7;9%sm" (string sub --start=3 -- "$text_background"))
+			end
 		else
 			# If we didn't, let's just use the section background color.
 			set -l arrow_color_name (string replace -- "--background=" "" \
