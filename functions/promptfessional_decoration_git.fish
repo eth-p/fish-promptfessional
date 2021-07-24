@@ -113,7 +113,7 @@ function promptfessional_decoration_git
 	set pattern (string replace --all "{merge_head}" "$git_merge_head" -- "$pattern")
 	set pattern (string replace --all "{color}" "$color" -- "$pattern")
 	
-	if [ -n "$git_branch" ]
+	if [ -n "$deco_branch" ]
 		set pattern (string replace --all "{branch }" "$deco_branch " -- "$pattern")
 		set pattern (string replace --all "{branch:}" "$deco_branch:" -- "$pattern")
 	else
@@ -121,7 +121,7 @@ function promptfessional_decoration_git
 		set pattern (string replace --all "{branch:}" "" -- "$pattern")
 	end
 	
-	if [ -n "$branch_or_head" ]
+	if [ -n "$deco_branch_or_head" ]
 		set pattern (string replace --all "{branch_or_head }" "$deco_branch_or_head " -- "$pattern")
 		set pattern (string replace --all "{branch_or_head:}" "$deco_branch_or_head:" -- "$pattern")
 	else
