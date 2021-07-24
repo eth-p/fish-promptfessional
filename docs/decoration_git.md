@@ -30,7 +30,7 @@ The color is chosen in this priority:
 |`--git-pattern-branch`|` {symbol}{branch}{status} `|The default pattern to use for the git decoration.|
 |`--git-pattern-detached`|` {symbol}{head}{status} `|The pattern to use when git has a detached HEAD.|
 |`--git-pattern-merge`|` {symbol}{branch_or_head }merge({merge_head}){status} `|The pattern to use when git is merging.|
-|`--git-pattern-rebase`|` {symbol}rebase({head}){status} `|The pattern to use when git is rebasing.|
+|`--git-pattern-rebase`|` {symbol}{branch_or_head }rebase({rebase_head}|{rebase_todo}){status} `|The pattern to use when git is rebasing.|
 |`--git-symbol-branch`|`⎇ `|Changes the symbol used to represent a branch.|
 |`--git-symbol-head`|`➦`|Changes the symbol used to represent a detached head.|
 |`--git-symbol-staged`|`~`|Changes the symbol used to represent staged changes.|
@@ -72,6 +72,8 @@ When specifying a pattern string, you can provide the following template variabl
 |`{branch_or_head:}`|Same as `{branch_or_head}`, but with a colon at the end if not empty.|
 |`{color:}`|The decoration color.|
 |`{head}`|The commit hash of the HEAD.|
-|`{merge_head}`|The hash of the commit being merged.|
+|`{merge_head}`|The hash of the commit being merged into the HEAD.|
+|`{rebase_head}`|The hash of the commit being rebased.|
+|`{rebase_todo}`|The number of rebase steps remaining.|
 |`{status}`|The status symbols showing if there are staged or unstaged changes.|
 |`{symbol}`|The head or branch symbol, depending on whether the HEAD is detached.|

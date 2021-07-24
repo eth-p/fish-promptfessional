@@ -34,6 +34,11 @@ function promptfessional_decoration_git
 	# Get info.
 	set -l git_head ""
 	set -l git_branch ""
+	set -l git_merge_head ""
+	set -l git_rebase_head ""
+	set -l git_rebase_todo ""
+	set -l git_is_rebasing false
+	set -l git_is_merging false
 	set -l git_conflict false 
 	set -l git_untracked false
 	set -l git_staged false
@@ -53,6 +58,7 @@ function promptfessional_decoration_git
 	if [ -z "$_flag_git_long_hash" ]
 		set git_head (string sub --length=7 -- "$git_head")
 		set git_merge_head (string sub --length=7 -- "$git_merge_head")
+		set git_rebase_head (string sub --length=7 -- "$git_rebase_head")
 	end
 
 	# Set default symbols.
@@ -65,7 +71,7 @@ function promptfessional_decoration_git
 	[ -n "$_flag_git_pattern_branch" ]   || set _flag_git_pattern_branch " {symbol}{branch}{status} "
 	[ -n "$_flag_git_pattern_detached" ] || set _flag_git_pattern_detached " {symbol}{head}{status} "
 	[ -n "$_flag_git_pattern_merge" ]    || set _flag_git_pattern_merge " {symbol}{branch_or_head }merge({merge_head}){status} "
-	[ -n "$_flag_git_pattern_rebase" ]   || set _flag_git_pattern_rebase " {symbol}rebase({head}){status} "
+	[ -n "$_flag_git_pattern_rebase" ]   || set _flag_git_pattern_rebase " {symbol}{branch_or_head }rebase({rebase_head}|{rebase_todo}){status} "
 	
 	# Generate the "{symbol}" and "{branch_or_head}" pattern variables.
 	set -l deco_symbol "$_flag_git_symbol_branch"
@@ -111,6 +117,8 @@ function promptfessional_decoration_git
 	set pattern (string replace --all "{branch}" "$deco_branch" -- "$pattern")
 	set pattern (string replace --all "{head}" "$git_head" -- "$pattern")
 	set pattern (string replace --all "{merge_head}" "$git_merge_head" -- "$pattern")
+	set pattern (string replace --all "{rebase_head}" "$git_rebase_head" -- "$pattern")
+	set pattern (string replace --all "{rebase_todo}" "$git_rebase_todo" -- "$pattern")
 	set pattern (string replace --all "{color}" "$color" -- "$pattern")
 	
 	if [ -n "$deco_branch" ]
@@ -145,7 +153,9 @@ end
 #   git_toplevel    :: The repo directory.
 #   git_branch      :: The name of the current branch.
 #   git_head        :: The full commit hash of the HEAD.
-#   git_merge_head  :: The full commit hash of the merge HEAD. (will be empty if not merging)
+#   git_merge_head  :: The full hash of the commit being merged into the HEAD. (will be empty if not merging)
+#   git_rebase_todo :: The number of steps remaining in the rebase.
+#   git_rebase_head :: The full hash of the commit being rebased. (will be empty if not rebasing)
 #   git_conflict    :: There are files that have merge conflicts.
 #   git_staged      :: There are staged changes.
 #   git_unstaged    :: There are unstaged modifications or deletions.
@@ -160,6 +170,7 @@ function __promptfessional_git_info --no-scope-shadowing
 	set git_head ""
 	set git_branch ""
 	set git_merge_head ""
+	set git_rebase_head ""
 	set git_conflict false 
 	set git_untracked false
 	set git_staged false
@@ -169,7 +180,9 @@ function __promptfessional_git_info --no-scope-shadowing
 
 	# If the cache is enabled and the key matches, use the cached vars.
 	set -l __git_cachekey ''
-	set -l __git_cachevars "conflict" "untracked" "staged" "unstaged" "head" "branch" "merge_head" "is_rebasing" "is_merging"
+	set -l __git_cachevars "conflict" "untracked" "staged" "unstaged" \
+		"head" "branch" "merge_head" "rebase_head" "rebase_todo" \
+		"is_rebasing" "is_merging"
 	if [ "$argv[2]" = "--git-use-cache" ]
 		set -l __git_lastmod (stat -c "%Y" "$argv[1]" "$git_gitdir" 2>/dev/null || stat -f "%m" "$argv[1]" "$git_gitdir")
 		set __git_cachekey "$git_toplevel:$__git_lastmod"
@@ -182,12 +195,23 @@ function __promptfessional_git_info --no-scope-shadowing
 		end
 	end
 	
-	# Get the branch name, head revision, and status about rebase/merge. 
+	# Get the branch name, head revision, and status about rebase/merge. 	
 	set git_branch (git -C "$argv[1]" branch --show-current 2>/dev/null)
 	set git_head (git -C "$argv[1]" rev-parse HEAD 2>/dev/null)
-	
+
 	if git -C "$argv[1]" rebase --show-current-patch &>/dev/null
 		set git_is_rebasing true
+		set git_rebase_todo (wc -l < "$git_gitdir/rebase-merge/git-rebase-todo" | string trim)
+
+		# Replace the git_head variable with the original head.
+		set git_rebase_head "$git_head"
+		set git_head (cat < "$git_gitdir/rebase-merge/orig-head")
+
+		# Try to find the original rebase branch.
+		set -l __git_rebase_branch (string split '/' < "$git_gitdir/rebase-merge/head-name")
+		if [ "$__git_rebase_branch[-1]" != "detached HEAD" ]
+			set git_branch "$__git_rebase_branch[-1]"
+		end
 	end
 	
 	set git_merge_head (git -C "$argv[1]" rev-list -1 MERGE_HEAD 2>/dev/null)
