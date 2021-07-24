@@ -36,9 +36,19 @@ promptfessional color --set my.color red                      # FG=red, BG=inher
 promptfessional color --set my.color red --background=green   # FG=red, BG=green
 ```
 
+Get info about a color:
+
+```fish
+promptfessional color my.color --print
+```
+
 ## Options
 
 |Option|Type|Description|
 |:--|:--|:--|
 |`--set`|(flag)|Sets the specified color.|
+|`--only-attributes`|(flag)|Only gets the text attributes of the color.|
+|`--only-background`|(flag)|Only gets the background of the color.|
+|`--only-foreground`|(flag)|Only gets the foreground of the color.|
 |`--or`|(color)|Output this color if the specified color is not defined.|
+|`--print`|(flag)|Prints the color name instead of the escape sequence.|
