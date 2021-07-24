@@ -54,7 +54,7 @@ function __promptfessional_fn_show --description "Displays a prompt component."
         return 1
     end
 
-    set -l text (promptfessional_component_"$argv[1]" $argv[2..-1])
+    set -l text (__promptfessional_render_component "$argv[1]" $argv[2..-1])
     if [ "$text" != "" ]
       set -g __promptfessional_current_section_parts $__promptfessional_current_section_parts "$text"
     end
@@ -75,6 +75,13 @@ function __promptfessional_fn_enable --description "Enables a prompt feature."
 		case "arrow"
 			set -g __promptfessional_section_arrow_symbol (printf "\uE0B0")
 			set -g __promptfessional_section_arrow_begin true
+			
+		case "timing"
+			function __promptfessional_render_component
+				printf "TIMINGS FOR PROMPT COMPONENT: %s\n" "$argv[1]" 1>&2
+				time __promptfessional_render_component_do $argv
+				return $status
+			end
 
 		case "*"
 			echo "unknown prompfessional feature: $argv[1]" 1>&2
@@ -365,3 +372,13 @@ function __promptfessional_color_extract
 		printf "%s\n" $_flag_bold $_flag_italics $_flag_dim $_flag_underline
 	end
 end
+
+# INTERNAL:
+# Renders a component.
+function __promptfessional_render_component_do
+	promptfessional_component_"$argv[1]" $argv[2..-1]
+	return $status
+end
+
+functions -e __promptfessional_render_component
+functions -c __promptfessional_render_component_do __promptfessional_render_component

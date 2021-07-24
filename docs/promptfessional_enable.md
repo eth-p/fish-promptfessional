@@ -10,6 +10,7 @@ This must be run first in the `fish_prompt` command.
 ## Features
 
 - `arrow` - Adds Powerline arrows between prompt sections.
+- `timing` - Prints execution time for each rendered component.
   
 
 ## Usage
