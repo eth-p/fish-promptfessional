@@ -21,6 +21,7 @@
 #   git.unstaged   :: Used when there are modified but unstaged files.
 function promptfessional_decoration_git
     if ! [ -e "$argv[1]/.git" ]
+    return 0
     	return 1
     end
     
@@ -111,31 +112,18 @@ function promptfessional_decoration_git
 	end
 	
 	# Fill out the pattern.
-	set pattern (string replace --all "{symbol}" "$deco_symbol" -- "$pattern")
-	set pattern (string replace --all "{status}" "$deco_status" -- "$pattern")
-	set pattern (string replace --all "{branch_or_head}" "$deco_branch_or_head" -- "$pattern")
-	set pattern (string replace --all "{branch}" "$deco_branch" -- "$pattern")
-	set pattern (string replace --all "{head}" "$git_head" -- "$pattern")
-	set pattern (string replace --all "{merge_head}" "$git_merge_head" -- "$pattern")
-	set pattern (string replace --all "{rebase_head}" "$git_rebase_head" -- "$pattern")
-	set pattern (string replace --all "{rebase_todo}" "$git_rebase_todo" -- "$pattern")
-	set pattern (string replace --all "{color}" "$color" -- "$pattern")
-	
-	if [ -n "$deco_branch" ]
-		set pattern (string replace --all "{branch }" "$deco_branch " -- "$pattern")
-		set pattern (string replace --all "{branch:}" "$deco_branch:" -- "$pattern")
-	else
-		set pattern (string replace --all "{branch }" "" -- "$pattern")
-		set pattern (string replace --all "{branch:}" "" -- "$pattern")
-	end
-	
-	if [ -n "$deco_branch_or_head" ]
-		set pattern (string replace --all "{branch_or_head }" "$deco_branch_or_head " -- "$pattern")
-		set pattern (string replace --all "{branch_or_head:}" "$deco_branch_or_head:" -- "$pattern")
-	else
-		set pattern (string replace --all "{branch_or_head }" "" -- "$pattern")
-		set pattern (string replace --all "{branch_or_head:}" "" -- "$pattern")
-	end
+	set pattern (
+		promptfessional util template -- "$pattern" \
+			"symbol" "$deco_symbol" \
+			"status" "$deco_status" \
+			"branch_or_head" "$deco_branch_or_head" \
+			"branch" "$deco_branch" \
+			"head" "$git_head" \
+			"merge_head" "$git_merge_head" \
+			"rebase_head" "$git_rebase_head" \
+			"rebase_todo" "$git_rebase_todo" \
+			"color" "$color"
+	)
 	
 	# Print the pattern.
 	printf "%s%s" "$color" "$pattern"

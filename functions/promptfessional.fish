@@ -169,6 +169,37 @@ function __promptfessional_util_seq --description "A faster version of the seq c
 	end
 end
 
+function __promptfessional_util_template --description "Replaces template variables."
+	argparse 'this-is-reserved' -- $argv
+	
+	set -l template $argv[1]
+	set -l index
+	
+	# Escape backslashes in the template.
+	set template (string replace --all -- "\\" "\\\\" "$template")
+	
+	# Fill in template variables.
+	for index in (promptfessional util seq 2 (count $argv) --step=2)
+		set -l var (string replace --all -- "." "\\." $argv[$index])
+		set -l val $argv[(math $index + 1)]
+		set -l val (string replace --all --regex -- "([\\\${])" "\\\\\$1" $argv[(math $index + 1)])
+		
+		set -l replacement "\${1}$val\${3}"
+		if [ -z "$val" ]
+			# If the value is empty, discard the padding symbols.
+			set replacement ""
+		end
+		
+		set template (
+			string replace --all --regex -- \
+			"(?!\\\\)\{([^a-zA-Z0-9\.]*)($var)([^a-zA-Z0-9\.]*)\}" "$replacement" \
+			"$template"
+		)
+	end
+	
+	echo "$template"
+end
+
 # ----------------------------------------------------------------------------------------------------------------------
 # INTERNAL FUNCTIONS
 # ----------------------------------------------------------------------------------------------------------------------
