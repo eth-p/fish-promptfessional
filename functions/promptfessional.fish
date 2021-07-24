@@ -65,7 +65,7 @@ end
 function __promptfessional_fn_literal --description "Displays a prompt literal."
 	set -l literal "$argv[1]"
 
-	promptfessional util template (printf (string replace --all "%" "%%" "$literal")) \
+	promptfessional util template -- (printf -- (string replace --all -- "%" "%%" "$literal")) \
 		"arrow" "$__promptfessional_section_arrow_symbol"
 end
 
@@ -252,8 +252,8 @@ function __promptfessional_util_template --description "Replaces template variab
 		
 		set template (
 			string replace --all --regex -- \
-			"(?!\\\\)\{([^a-zA-Z0-9\.]*)($var)([^a-zA-Z0-9\.]*)\}" "$replacement" \
-			"$template"
+				"(?!\\\\)\{([^a-zA-Z0-9\.]*)($var)([^a-zA-Z0-9\.]*)\}" "$replacement" \
+				"$template"
 		)
 	end
 	
@@ -277,13 +277,13 @@ function __promptfessional_end_section --description "Prints the current section
 
     set -l delimiter "$reset$color$__promptfessional_current_section_delimiter"
     set -l text (string join "$delimiter" -- $__promptfessional_current_section_parts)
-    set -l text_no_ansi (promptfessional util ansi_strip "$text")
+    set -l text_no_ansi (promptfessional util ansi_strip -- "$text")
     set -l pattern "$__promptfessional_current_section_pattern"
 
     # If the pattern ends with a space and the section ends with a space, don't print the last pattern space.
-    if [ (string sub --start=-1 "$pattern") = " " ] \
-    && [ (string sub --start=-1 "$text_no_ansi") = " " ]
-		set pattern (string sub --length=(math (string length "$pattern") - 1) "$pattern")
+    if [ (string sub --start=-1 -- "$pattern") = " " ] \
+    && [ (string sub --start=-1 -- "$text_no_ansi") = " " ]
+		set pattern (string sub --length=(math (string length -- "$pattern") - 1) -- "$pattern")
 	end
     
 	# Print the powerline arrow if enabled.
@@ -292,7 +292,7 @@ function __promptfessional_end_section --description "Prints the current section
 		
 		# Get the current section's initial background color.
 		# First, we'll try to parse out an ANSI background color escape sequence.
-		set -l text_background (promptfessional util ansi_extract "$text" --first --background --unrendered)
+		set -l text_background (promptfessional util ansi_extract --first --background --unrendered -- "$text")
 		if [ $status -eq 0 ]
 			# If we found a background color, we swap it to a foreground color and enter reverse mode.
 			switch "$text_background"
@@ -329,13 +329,13 @@ function __promptfessional_end_section --description "Prints the current section
 	
 	# If the section text begins with a background color, apply that to the start of the section.
 	set -l first_bg (
-		promptfessional util ansi_extract --first --background \
+		promptfessional util ansi_extract --first --background -- \
 			(promptfessional util ansi_extract --first --sequences -- "$text")
 	)
 
     # Print the section.
-    set -l pattern "$color$first_bg"(string replace "%s" "%s$color" "$pattern")
-    printf "$pattern" "$text"
+    set -l pattern "$color$first_bg"(string replace -- "%s" "%s$color" "$pattern")
+    printf -- "$pattern" "$text"
 
     # Clear the section data.
     set __promptfessional_current_section ''
