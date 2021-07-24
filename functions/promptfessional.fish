@@ -319,9 +319,15 @@ function __promptfessional_end_section --description "Prints the current section
 				(set_color normal)
 		end
 	end
+	
+	# If the section text begins with a background color, apply that to the start of the section.
+	set -l first_bg (
+		promptfessional util ansi_extract --first --background \
+			(promptfessional util ansi_extract --first --sequences -- "$text")
+	)
 
     # Print the section.
-    set -l pattern "$color"(string replace "%s" "%s$color" "$pattern")
+    set -l pattern "$color$first_bg"(string replace "%s" "%s$color" "$pattern")
     printf "$pattern" "$text"
 
     # Clear the section data.
