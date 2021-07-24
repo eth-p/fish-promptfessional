@@ -10,6 +10,11 @@ function promptfessional
     return $status
 end
 
+function __promptfessional_fn_util
+    __promptfessional_util_"$argv[1]" $argv[2..-1]
+    return $status
+end
+
 # Ends the current section, printing its components.
 function __promptfessional_fn_end --description "Ends a declared prompt section."
   __promptfessional_end_section
@@ -143,6 +148,15 @@ function __promptfessional_fn_color --description "Gets or sets a prompt color."
 end
 
 # ----------------------------------------------------------------------------------------------------------------------
+# UTILITY FUNCTIONS
+# ----------------------------------------------------------------------------------------------------------------------
+
+function __promptfessional_util_ansi_strip --description "Strips ANSI Colors from a string."
+	string replace --all --regex "\x1B(?:\[[\d;]*[a-zA-Z]|\(B)" "" -- $argv
+	return $status
+end
+
+# ----------------------------------------------------------------------------------------------------------------------
 # INTERNAL FUNCTIONS
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -159,7 +173,7 @@ function __promptfessional_end_section --description "Prints the current section
 
     set -l delimiter "$reset$color$__promptfessional_current_section_delimiter"
     set -l text (string join "$delimiter" -- $__promptfessional_current_section_parts)
-    set -l text_no_ansi (string replace --all --regex "\x1B(?:\[[\d;]*[a-zA-Z]|\(B)" "" "$text")
+    set -l text_no_ansi (promptfessional util ansi_strip "$text")
     set -l pattern "$__promptfessional_current_section_pattern"
 
     # If the pattern ends with a space and the section ends with a space, don't print the last pattern space.

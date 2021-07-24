@@ -96,6 +96,7 @@ Check out the documentation for built-in components:
 - [promptfessional color](docs/promptfessional_color.md)
 - [promptfessional enable](docs/promptfessional_enable.md)
 - [promptfessional section](docs/promptfessional_section.md)
+- [promptfessional util ansi_strip](docs/promptfessional_util_ansi_strip.md)
 
 ### Components
 
