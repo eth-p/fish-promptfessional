@@ -64,9 +64,9 @@ end
 # This will implicitly end the previous prompt section, if there is one.
 function __promptfessional_fn_literal --description "Displays a prompt literal."
 	set -l literal "$argv[1]"
-	set literal (string replace -- "{arrow}" "$__promptfessional_section_arrow_symbol" "$literal")
 
-	printf "%s" "$literal"
+	promptfessional util template (printf (string replace --all "%" "%%" "$literal")) \
+		"arrow" "$__promptfessional_section_arrow_symbol"
 end
 
 # Enables a prompt setting.
