@@ -21,6 +21,7 @@ function __promptfessional_theme
 		
 		# Sections
 		promptfessional color "$set" section.status --background='ffffff'
+		promptfessional color "$set" section.cmdtime --background='dddddd'
 		promptfessional color "$set" section.path --background='333333'
 	
 		# Status
@@ -30,6 +31,9 @@ function __promptfessional_theme
 		promptfessional color "$set" component.status.error 'ff0000' --bold
 		promptfessional color "$set" component.status.ok 'normal'
 		promptfessional color "$set" component.venv ccf --background='4b8bbe'
+		promptfessional color "$set" component.cmdtime '666666'
+		promptfessional color "$set" component.cmdtime.slow 'aa6666'
+		promptfessional color "$set" component.cmdtime.unit '888888'
 		
 		# Path
 		promptfessional color "$set" component.path '999999'
@@ -50,6 +54,7 @@ function __promptfessional_theme
 
 		# Sections
 		promptfessional color "$set" section.status --background='999'
+		promptfessional color "$set" section.cmdtime --background='bbb'
 		promptfessional color "$set" section.path --background='eeeeee'
 	
 		# Status
@@ -59,6 +64,9 @@ function __promptfessional_theme
 		promptfessional color "$set" component.status.error 'ff0000' --bold
 		promptfessional color "$set" component.status.ok 'normal'
 		promptfessional color "$set" component.venv ccf --background='4b8bbe'
+		promptfessional color "$set" component.cmdtime '333333'
+		promptfessional color "$set" component.cmdtime.slow 'aa3333'
+		promptfessional color "$set" component.cmdtime.unit '444444'
 		
 		# Path
 		promptfessional color "$set" component.path '666666'

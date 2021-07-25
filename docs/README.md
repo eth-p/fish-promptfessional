@@ -62,6 +62,7 @@ See [custom_decoration.md](custom_decoration.md) for custom path decorations.
 
 ### Components
 
+- [cmdtime](component_cmdtime.md)
 - [status](component_status.md)
 - [sudo](component_sudo.md)
 - [jobs](component_jobs.md)

@@ -129,6 +129,7 @@ Check out the documentation for built-in components:
 
 ### Components
 
+- [cmdtime](docs/component_cmdtime.md)
 - [status](docs/component_status.md)
 - [sudo](docs/component_sudo.md)
 - [jobs](docs/component_jobs.md)
