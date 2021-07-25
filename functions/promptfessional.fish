@@ -252,7 +252,7 @@ function __promptfessional_util_template --description "Replaces template variab
 		
 		set template (
 			string replace --all --regex -- \
-				"(?!\\\\)\{([^a-zA-Z0-9\.]*)($var)([^a-zA-Z0-9\.]*)\}" "$replacement" \
+				"(?!\\\\)\{([^a-zA-Z0-9_]*)($var)([^a-zA-Z0-9_]*)\}" "$replacement" \
 				"$template"
 		)
 	end
