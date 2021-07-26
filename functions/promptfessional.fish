@@ -124,7 +124,7 @@ function __promptfessional_fn_color --description "Gets or sets a prompt color."
     if [ -z "$_flag_set" ] && [ -z "$_flag_set_default" ]
         if [ -z "$color" ]
         	if [ -n "$_flag_or" ]
-        		__promptfessional_color "$_flag_or" \
+        		__promptfessional_fn_color "$_flag_or" \
         			$_flag_only_foreground $_flag_only_background $_flag_only_attributes
         		return $status
         	end
