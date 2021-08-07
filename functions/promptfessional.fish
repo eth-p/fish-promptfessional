@@ -260,6 +260,61 @@ function __promptfessional_util_template --description "Replaces template variab
 	echo "$template"
 end
 
+function _promptfessional_var_cache --no-scope-shadowing --description "Caches variables."
+	argparse 'cache-namespace=' 'cache-key=' 'update-cache' -- $argv || return 2
+	set -l __cache_vars $argv
+	set -l __cache_key (printf '__promptfessional_cached__%s__key' "$_flag_cache_namespace")
+
+	# Validate options.
+	if [ -z "$_flag_cache_namespace" ]
+		echo "promptfessional util cache: missing option --cache-namespace" 1>&2
+		return 2
+	end
+	
+	if [ -z "$_flag_cache_key" ]
+		echo "promptfessional util cache: missing option --cache-key" 1>&2
+		return 2
+	end
+	
+	# If --update-cache is set, update the cache.
+	if [ -n "$_flag_update_cache" ]
+		# Set the variables.
+		set -l __cache_var_name
+		for __cache_var_name in $__cache_vars
+			set -l __cache_var (
+				printf '__promptfessional_cached__%s__var_%s' \
+				"$_flag_cache_namespace" "$__cache_var_name"
+			)
+
+			eval "set -g $__cache_var \$$__cache_var_name"
+		end
+
+		# Set the key.
+		eval "set -g $__cache_key" "$_flag_cache_key"
+		return 0
+	end
+
+	# If the cache key is different, return 1 to signal it needs updating.
+	set -l __cache_key_last (eval "echo \$$__cache_key")
+	if [ "$_flag_cache_key" != "$__cache_key_last" ]
+		return 1
+	end
+
+	# If the cache key is the same, load the cache.
+	set -l __cache_var_name
+	for __cache_var_name in $__cache_vars
+		set -l __cache_var (
+			printf '__promptfessional_cached__%s__var_%s' \
+			"$_flag_cache_namespace" "$__cache_var_name"
+		)
+
+		eval "set $__cache_var_name \$$__cache_var"
+	end
+	return 0
+end
+
+
+
 # ----------------------------------------------------------------------------------------------------------------------
 # INTERNAL FUNCTIONS
 # ----------------------------------------------------------------------------------------------------------------------

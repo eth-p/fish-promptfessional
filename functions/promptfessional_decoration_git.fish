@@ -168,17 +168,16 @@ function __promptfessional_git_info --no-scope-shadowing
 
 	# If the cache is enabled and the key matches, use the cached vars.
 	set -l __git_cachekey ''
-	set -l __git_cachevars "conflict" "untracked" "staged" "unstaged" \
-		"head" "branch" "merge_head" "rebase_head" "rebase_todo" \
-		"is_rebasing" "is_merging"
+	set -l __git_cachevars "git_conflict" "git_untracked" "git_staged" \
+		"git_unstaged" "git_head" "git_branch" "git_merge_head" \
+		"git_rebase_head" "git_rebase_todo" "git_is_rebasing" "git_is_merging"
+	
 	if [ "$argv[2]" = "--git-use-cache" ]
 		set -l __git_lastmod (stat -c "%Y" "$argv[1]" "$git_gitdir" 2>/dev/null || stat -f "%m" "$argv[1]" "$git_gitdir")
 		set __git_cachekey "$git_toplevel:$__git_lastmod"
-		if [ "$__promptfessional_git_cache_key" = "$__git_cachekey" ]
-			set -l key
-			for key in $__git_cachevars
-				eval "set git_$key "'$'"__promptfessional_git_cache_$key" 
-			end
+		if _promptfessional_var_cache \
+			--cache-namespace="promptfessional_git_info" \
+			--cache-key="$__git_cachekey" $__git_cachevars
 			return 0
 		end
 	end
@@ -227,11 +226,9 @@ function __promptfessional_git_info --no-scope-shadowing
 
 	# If the cache is enabled, update the cache.
 	if [ "$argv[2]" = "--git-use-cache" ]
-		set -l key
-		for key in $__git_cachevars
-			eval "set -g __promptfessional_git_cache_$key "'$'"git_$key" 
-		end
-		set -g __promptfessional_git_cache_key "$__git_cachekey"
+		_promptfessional_var_cache --update-cache \
+			--cache-namespace="promptfessional_git_info" \
+			--cache-key="$__git_cachekey" $__git_cachevars
 	end
-
 end
+

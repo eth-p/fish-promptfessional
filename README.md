@@ -126,6 +126,7 @@ Check out the documentation for built-in components:
 - [promptfessional util ansi_strip](docs/promptfessional_util_ansi_strip.md)
 - [promptfessional util seq](docs/promptfessional_util_seq.md)
 - [promptfessional util template](docs/promptfessional_util_template.md)
+- [_promptfessional_var_cache](promptfessional_var_cache.md)
 
 ### Components
 

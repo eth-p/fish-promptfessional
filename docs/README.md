@@ -59,6 +59,7 @@ See [custom_decoration.md](custom_decoration.md) for custom path decorations.
 - [promptfessional util ansi_strip](promptfessional_util_ansi_strip.md)
 - [promptfessional util seq](promptfessional_util_seq.md)
 - [promptfessional util template](promptfessional_util_template.md)
+- [_promptfessional_var_cache](promptfessional_var_cache.md)
 
 ### Components
 
