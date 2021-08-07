@@ -327,10 +327,10 @@ function __promptfessional_end_section --description "Prints the current section
     end
 
     # Join together all the parts in the section.
-    set -l reset (set_color normal)
-    set -l color "$__promptfessional_current_section_color"
+	set -l reset (set_color normal)
+	set -l color "$__promptfessional_current_section_color"
 
-    set -l delimiter "$reset$color$__promptfessional_current_section_delimiter"
+    set -l delimiter "$color$__promptfessional_current_section_delimiter"
     set -l text (string join "$delimiter" -- $__promptfessional_current_section_parts)
     set -l text_no_ansi (promptfessional util ansi_strip -- "$text")
     set -l pattern "$__promptfessional_current_section_pattern"
@@ -374,11 +374,10 @@ function __promptfessional_end_section --description "Prints the current section
 			set __promptfessional_section_arrow_begin false
 		else
 			# Print the arrow.
-			printf "%s%s%s%s" \
+			printf "%s%s%s" \
 				"$arrow_color" \
-				"$__promptfessional_section_arrow_lastbg" \
 				"$__promptfessional_section_arrow_symbol" \
-				(set_color normal)
+				"$reset"
 		end
 	end
 	
@@ -389,7 +388,7 @@ function __promptfessional_end_section --description "Prints the current section
 	)
 
     # Print the section.
-    set -l pattern "$color$first_bg"(string replace -- "%s" "%s$color" "$pattern")
+    set -l pattern "$reset$color$first_bg$pattern"
     printf -- "$pattern" "$text"
 
     # Clear the section data.
