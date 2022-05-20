@@ -50,6 +50,9 @@ function __promptfessional_theme
 		promptfessional color "$set" git.unstaged --background='bb1100' 'ffffff'
 		promptfessional color "$set" git.untracked --background='99cc00' 'ffffff'
 
+		# Docker
+		promptfessional color "$set" component.docker --background='384d54' 'cccccc'
+
 	case "light"
 
 		# Sections
@@ -82,6 +85,9 @@ function __promptfessional_theme
 		promptfessional color "$set" git.staged --background='dd7700' 'ffffff'
 		promptfessional color "$set" git.unstaged --background='dd0000' 'ffffff'
 		promptfessional color "$set" git.untracked --background='00dd00' 'ffffff'
+
+		# Docker
+		promptfessional color "$set" component.docker --background='9de7fd' '333333'
 
 	end
 end
