@@ -13,7 +13,9 @@ Displays the current `DOCKER_CONTEXT`.
 |Option|Default|Description|
 |:--|:--|:--|
 |`--symbol`|(None)|Display a symbol before the context.|
-|`--only-non-default`|`false`|Only display if `DOCKER_CONTEXT` is set.|
+|`--hide-context=[name]`|(None)|Hide the context with the specified name.<br />Can be specified multiple times.|
+|`--hide-default`|False|Hide when no context is specified.|
+|`--show-unexpected`|False|Show the context even when `DOCKER_CONTEXT` is not exported.|
 
 ## Colors
 
