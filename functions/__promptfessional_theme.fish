@@ -53,6 +53,9 @@ function __promptfessional_theme
 		# Docker
 		promptfessional color "$set" component.docker --background='384d54' 'cccccc'
 
+		# Java
+		promptfessional color "$set" component.java --background='a86616' 'cccccc'
+
 	case "light"
 
 		# Sections
@@ -88,6 +91,9 @@ function __promptfessional_theme
 
 		# Docker
 		promptfessional color "$set" component.docker --background='9de7fd' '333333'
+
+		# Java
+		promptfessional color "$set" component.java --background='f89820' '000000'
 
 	end
 end

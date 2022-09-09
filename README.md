@@ -134,6 +134,7 @@ Check out the documentation for built-in components:
 - [docker](docs/component_docker.md)
 - [status](docs/component_status.md)
 - [sudo](docs/component_sudo.md)
+- [java](docs/component_java.md)
 - [jobs](docs/component_jobs.md)
 - [path](docs/component_path.md)
 - [path_permission](docs/component_path_permission.md)
