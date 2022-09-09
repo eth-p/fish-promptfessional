@@ -12,10 +12,10 @@
 #   component.path_permission.no_read   :: Used when the directory cannot be read.
 #   component.path_permission.no_write  :: Used when the directory cannot be written to.
 function promptfessional_component_path_permission --description "Promptfessional Component: Path Permission"
-    argparse -i 'always' -- $argv
-    [ -n "$_flag_symbol" ] || set _flag_symbol '[rw]'
-    [ -n "$_flag_symbol_no_read" ] || set _flag_symbol_no_read '[na]'
-    [ -n "$_flag_symbol_no_write" ] || set _flag_symbol_no_write '[ro]'
+	argparse -i 'always' -- $argv
+	[ -n "$_flag_symbol" ] || set _flag_symbol '[rw]'
+	[ -n "$_flag_symbol_no_read" ] || set _flag_symbol_no_read '[na]'
+	[ -n "$_flag_symbol_no_write" ] || set _flag_symbol_no_write '[ro]'
 
 	set -l pwd (pwd)
 	
@@ -42,3 +42,4 @@ function promptfessional_component_path_permission --description "Promptfessiona
 	
 	return 1
 end
+

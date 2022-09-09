@@ -20,18 +20,18 @@
 #   git.staged     :: Used when there are staged but uncomitted changes.
 #   git.unstaged   :: Used when there are modified but unstaged files.
 function promptfessional_decoration_git
-    if ! [ -e "$argv[1]/.git" ]
-    return 0
-    	return 1
-    end
-    
-    argparse -i 'git-hide-branch=+' 'git-use-cache' 'git-long-hash' \
-    	'git-pattern-merge=' 'git-pattern-rebase=' \
-    	'git-pattern-detached=' 'git-pattern-branch=' \
-    	'git-symbol-branch=' 'git-symbol-head=' \
-    	'git-symbol-staged=' 'git-symbol-unstaged=' \
-    	-- $argv
-    
+	if ! [ -e "$argv[1]/.git" ]
+	return 0
+		return 1
+	end
+	
+	argparse -i 'git-hide-branch=+' 'git-use-cache' 'git-long-hash' \
+		'git-pattern-merge=' 'git-pattern-rebase=' \
+		'git-pattern-detached=' 'git-pattern-branch=' \
+		'git-symbol-branch=' 'git-symbol-head=' \
+		'git-symbol-staged=' 'git-symbol-unstaged=' \
+		-- $argv
+	
 	# Get info.
 	set -l git_head ""
 	set -l git_branch ""
@@ -102,13 +102,13 @@ function promptfessional_decoration_git
 	# Determine the color.
 	set -l color ""
 	if $git_unstaged
-    	set color (promptfessional color git.unstaged)
+		set color (promptfessional color git.unstaged)
 	else if $git_staged
-    	set color (promptfessional color git.staged)
+		set color (promptfessional color git.staged)
 	else if $git_untracked
    		set color (promptfessional color git.untracked)
 	else
-    	set color (promptfessional color git.clean)
+		set color (promptfessional color git.clean)
 	end
 	
 	# Fill out the pattern.
@@ -127,8 +127,8 @@ function promptfessional_decoration_git
 	
 	# Print the pattern.
 	printf "%s%s" "$color" "$pattern"
-    
-    return 0
+	
+	return 0
 end
 
 # Gets info about the current git repo, setting local variables.

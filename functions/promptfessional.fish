@@ -6,25 +6,25 @@
 # Issues:        https://github.com/eth-p/fish-promptfessional/issues
 #
 function promptfessional
-    __promptfessional_fn_"$argv[1]" $argv[2..-1]
-    return $status
+	__promptfessional_fn_"$argv[1]" $argv[2..-1]
+	return $status
 end
 
 function __promptfessional_fn_util
-    __promptfessional_util_"$argv[1]" $argv[2..-1]
-    return $status
+	__promptfessional_util_"$argv[1]" $argv[2..-1]
+	return $status
 end
 
 # Ends the current section, printing its components.
 function __promptfessional_fn_end --description "Ends a declared prompt section."
-  __promptfessional_end_section
-  set_color normal
+	__promptfessional_end_section
+	set_color normal
 end
 
 # Declares the start of a prompt section.
 # This will implicitly end the previous prompt section, if there is one.
 function __promptfessional_fn_section --description "Declares the start of a prompt section."
-    argparse 'pattern=' 'delimiter=' 'current-color' -- $argv
+	argparse 'pattern=' 'delimiter=' 'current-color' -- $argv
 
 	# Argument: --get-color
 	if [ -n "$_flag_current_color" ]
@@ -34,30 +34,30 @@ function __promptfessional_fn_section --description "Declares the start of a pro
 
 	# Set the default colors and end the previous section.
 	__promptfessional_theme --default dark
-    __promptfessional_end_section
+	__promptfessional_end_section
 
-    # Default arguments.
-    [ -n "$_flag_pattern" ] || set _flag_pattern " %s "
+	# Default arguments.
+	[ -n "$_flag_pattern" ] || set _flag_pattern " %s "
 
 	# Initialize the section.
-    set -g __promptfessional_current_section $argv[1]
-    set -g __promptfessional_current_section_parts
-    set -g __promptfessional_current_section_pattern "$_flag_pattern"
-    set -g __promptfessional_current_section_delimiter "$_flag_delimiter"
-    set -g __promptfessional_current_section_color (promptfessional color "section.$argv[1]" --or "section")
+	set -g __promptfessional_current_section $argv[1]
+	set -g __promptfessional_current_section_parts
+	set -g __promptfessional_current_section_pattern "$_flag_pattern"
+	set -g __promptfessional_current_section_delimiter "$_flag_delimiter"
+	set -g __promptfessional_current_section_color (promptfessional color "section.$argv[1]" --or "section")
 end
 
 # Displays a component.
 function __promptfessional_fn_show --description "Displays a prompt component."
-    if not functions "promptfessional_component_"$argv[1] &>/dev/null
-        echo "Unknown promptfessional component: $argv[1]" 1>&2
-        return 1
-    end
+	if not functions "promptfessional_component_"$argv[1] &>/dev/null
+		echo "Unknown promptfessional component: $argv[1]" 1>&2
+		return 1
+	end
 
-    set -l text (__promptfessional_render_component "$argv[1]" $argv[2..-1])
-    if [ "$text" != "" ]
-      set -g __promptfessional_current_section_parts $__promptfessional_current_section_parts "$text"
-    end
+	set -l text (__promptfessional_render_component "$argv[1]" $argv[2..-1])
+	if [ "$text" != "" ]
+		set -g __promptfessional_current_section_parts $__promptfessional_current_section_parts "$text"
+	end
 end
 
 # Declares the start of a prompt section.
@@ -108,29 +108,29 @@ end
 #   promptfessional color --set component.path --background=normal green   # Set the path to green.
 #   promptfessional color --set section.status --background=white
 function __promptfessional_fn_color --description "Gets or sets a prompt color."
-    argparse -i 'set' 'set-default' 'only-foreground' 'only-background' 'only-attributes' 'print' 'or=' -- $argv
+	argparse -i 'set' 'set-default' 'only-foreground' 'only-background' 'only-attributes' 'print' 'or=' -- $argv
 
-    set -l name (string replace --all -- '.' '_' $argv[1])
-    set -l value $argv[2..-1]
+	set -l name (string replace --all -- '.' '_' $argv[1])
+	set -l value $argv[2..-1]
 	set -l color
 	eval "set color \$__promptfessional_colors__$name"
-    
-    # If --set-default is passed and the color is defined, return.
-    if [ -n "$_flag_set_default" ] && [ -n "$color" ]
-    	return
+	
+	# If --set-default is passed and the color is defined, return.
+	if [ -n "$_flag_set_default" ] && [ -n "$color" ]
+		return
 	end
 
 	# If neither --set nor --set-default were passed, get the color.
-    if [ -z "$_flag_set" ] && [ -z "$_flag_set_default" ]
-        if [ -z "$color" ]
-        	if [ -n "$_flag_or" ]
-        		__promptfessional_fn_color "$_flag_or" \
-        			$_flag_only_foreground $_flag_only_background $_flag_only_attributes
-        		return $status
-        	end
-        	return 1
-        end
-        
+	if [ -z "$_flag_set" ] && [ -z "$_flag_set_default" ]
+		if [ -z "$color" ]
+			if [ -n "$_flag_or" ]
+				__promptfessional_fn_color "$_flag_or" \
+					$_flag_only_foreground $_flag_only_background $_flag_only_attributes
+				return $status
+			end
+			return 1
+		end
+	
 		# If we're only trying to get the foreground/background/attributes, run it through
 		# the color extraction function.
 		if [ -n "$_flag_only_foreground$_flag_only_background$_flag_only_attributes" ]
@@ -146,12 +146,12 @@ function __promptfessional_fn_color --description "Gets or sets a prompt color."
 			return 0
 		end
 
-        set_color $color
-        return $result_status
-    end
+		set_color $color
+		return $result_status
+	end
 
 	# Otherwise, set the color.
-    set -g "__promptfessional_colors__$name" $value
+	set -g "__promptfessional_colors__$name" $value
 end
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -322,25 +322,25 @@ end
 # INTERNAL:
 # Joins together all the rendered components and prints them.
 function __promptfessional_end_section --description "Prints the current section."
-    if [ -z "$__promptfessional_current_section" ] || [ (count $__promptfessional_current_section_parts) -eq 0 ]
-        return 1
-    end
+	if [ -z "$__promptfessional_current_section" ] || [ (count $__promptfessional_current_section_parts) -eq 0 ]
+		return 1
+	end
 
-    # Join together all the parts in the section.
+	# Join together all the parts in the section.
 	set -l reset (set_color normal)
 	set -l color "$__promptfessional_current_section_color"
 
-    set -l delimiter "$color$__promptfessional_current_section_delimiter"
-    set -l text (string join "$delimiter" -- $__promptfessional_current_section_parts)
-    set -l text_no_ansi (promptfessional util ansi_strip -- "$text")
-    set -l pattern "$__promptfessional_current_section_pattern"
+	set -l delimiter "$color$__promptfessional_current_section_delimiter"
+	set -l text (string join "$delimiter" -- $__promptfessional_current_section_parts)
+	set -l text_no_ansi (promptfessional util ansi_strip -- "$text")
+	set -l pattern "$__promptfessional_current_section_pattern"
 
-    # If the pattern ends with a space and the section ends with a space, don't print the last pattern space.
-    if [ (string sub --start=-1 -- "$pattern") = " " ] \
-    && [ (string sub --start=-1 -- "$text_no_ansi") = " " ]
+	# If the pattern ends with a space and the section ends with a space, don't print the last pattern space.
+	if [ (string sub --start=-1 -- "$pattern") = " " ] \
+	&& [ (string sub --start=-1 -- "$text_no_ansi") = " " ]
 		set pattern (string sub --length=(math (string length -- "$pattern") - 1) -- "$pattern")
 	end
-    
+	
 	# Print the powerline arrow if enabled.
 	if [ -n "$__promptfessional_section_arrow_symbol" ]
 		set -l arrow_color ""
@@ -387,12 +387,12 @@ function __promptfessional_end_section --description "Prints the current section
 			(promptfessional util ansi_extract --first --sequences -- "$text")
 	)
 
-    # Print the section.
-    set -l pattern "$reset$color$first_bg$pattern"
-    printf -- "$pattern" "$text"
+	# Print the section.
+	set -l pattern "$reset$color$first_bg$pattern"
+	printf -- "$pattern" "$text"
 
-    # Clear the section data.
-    set __promptfessional_current_section ''
+	# Clear the section data.
+	set __promptfessional_current_section ''
 end
 
 # INTERNAL:
@@ -436,3 +436,4 @@ end
 
 functions -e __promptfessional_render_component
 functions -c __promptfessional_render_component_do __promptfessional_render_component
+

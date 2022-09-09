@@ -10,30 +10,30 @@
 #   component.path.current     :: Used for the current directory.
 #   component.path.current.ro  :: Used for the current directory when the user doesn't have write permissions.
 function promptfessional_component_path
-    argparse -i 'decoration=' 'collapse-home' 'abbrev-parents' -- $argv
-    set -l deco_args $argv
-    set -l color ''
-    
-    # Get the current directory.
-    set -l pwd (pwd)
-    set -l display_pwd "$pwd"
-    
-    # If '--collapse-home' is passed, replace "$HOME/" with ~/
-    if [ -n "$_flag_collapse_home" ]
-    	set -l pwd_starts (string sub --length=(math (string length "$HOME") + 1) -- "$pwd")
-    	if [ "$pwd_starts" = "$HOME" ]
-    		set display_pwd "~"
-    	else if [ "$pwd_starts" = "$HOME/" ]
-    		set display_pwd "~/"(string sub --start=(math (string length "$HOME") + 2) -- "$pwd")
-    	end
-    end
-    
-    # Configure dynamic dispatch.
+	argparse -i 'decoration=' 'collapse-home' 'abbrev-parents' -- $argv
+	set -l deco_args $argv
+	set -l color ''
+	
+	# Get the current directory.
+	set -l pwd (pwd)
+	set -l display_pwd "$pwd"
+	
+	# If '--collapse-home' is passed, replace "$HOME/" with ~/
+	if [ -n "$_flag_collapse_home" ]
+		set -l pwd_starts (string sub --length=(math (string length "$HOME") + 1) -- "$pwd")
+		if [ "$pwd_starts" = "$HOME" ]
+			set display_pwd "~"
+		else if [ "$pwd_starts" = "$HOME/" ]
+			set display_pwd "~/"(string sub --start=(math (string length "$HOME") + 2) -- "$pwd")
+		end
+	end
+	
+	# Configure dynamic dispatch.
 	set -l render_parent __promptfessional_component_path__render_parent
 	[ -n "$_flag_abbrev_parents" ] && set render_parent __promptfessional_component_path__render_parent_abbreviated
-    
-    # Walk through the path.
-    set -l dirs (string split -- '/' "$display_pwd")
+	
+	# Walk through the path.
+	set -l dirs (string split -- '/' "$display_pwd")
 	set -l dir_path "/"
 	set -l first_separator ""
 	set -l rendered_segment
@@ -149,3 +149,4 @@ function __promptfessional_component_path__push --no-scope-shadowing
 		set rendered_segment_decoration $rendered_segment_decoration "$deco_str"
 	end
 end
+

@@ -4,11 +4,11 @@
 #   dark   :: For dark terminals.
 #   light  :: For light terminals.
 function __promptfessional_theme
-    argparse 'default' -- $argv
-    set -l set "--set"
-    
-    # If the --default flag is passed, only set colors if we need to.
-    if [ -n "$_flag_default" ]
+	argparse 'default' -- $argv
+	set -l set "--set"
+	
+	# If the --default flag is passed, only set colors if we need to.
+	if [ -n "$_flag_default" ]
 		if [ "$__promptfessional_theme_init" = "1" ]
 			return 0
 		end
@@ -97,3 +97,4 @@ function __promptfessional_theme
 
 	end
 end
+
