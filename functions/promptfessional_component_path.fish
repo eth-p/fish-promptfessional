@@ -92,7 +92,7 @@ function promptfessional_component_path
 		end
 		
 		# Print the current segment.
-		[ $i -eq 2 ] && printf -- "$first_separator"
+		[ $i -eq 2 ] && printf "%s" "$first_separator"
 		printf "%s" "$rendered_segment[$i]"
 		
 		# If there's a decoration, render that.

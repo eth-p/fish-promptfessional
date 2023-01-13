@@ -65,7 +65,7 @@ end
 function __promptfessional_fn_literal --description "Displays a prompt literal."
 	set -l literal "$argv[1]"
 
-	promptfessional util template -- (printf -- (string replace --all -- "%" "%%" "$literal")) \
+	promptfessional util template -- (printf $__promptfessional_printf_accept_pattern_variable (string replace --all -- "%" "%%" "$literal")) \
 		"arrow" "$__promptfessional_section_arrow_symbol"
 end
 
@@ -389,7 +389,7 @@ function __promptfessional_end_section --description "Prints the current section
 
 	# Print the section.
 	set -l pattern "$reset$color$first_bg$pattern"
-	printf -- "$pattern" "$text"
+	printf $__promptfessional_printf_accept_pattern_variable "$pattern" "$text"
 
 	# Clear the section data.
 	set __promptfessional_current_section ''
@@ -400,7 +400,7 @@ end
 function __promptfessional_color_extract
 	argparse 'b/background=' 'o/bold' 'd/dim' 'i/italics' 'r/reverse' 'u/underline' \
 		'only-background' 'only-foreground' 'only-attributes' -- $argv
-	
+
 	# Set the defaults if missing the foreground or background.
 	set -l foreground "$argv[1]"
 	[ -n "$_flag_background" ] || set _flag_background "normal"
@@ -436,4 +436,10 @@ end
 
 functions -e __promptfessional_render_component
 functions -c __promptfessional_render_component_do __promptfessional_render_component
+
+# Workaround for https://github.com/fish-shell/fish-shell/issues/9132
+set -g __promptfessional_printf_accept_pattern_variable "--"
+if [ (printf "$__promptfessional_printf_accept_pattern_variable" "check") = "--" ]
+	set __promptfessional_printf_accept_pattern_variable
+end
 
