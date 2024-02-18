@@ -14,7 +14,7 @@ function promptfessional_default_prompt
 			--abbrev-parents \
 			--decoration promptfessional_decoration_git \
 			--git-hide-branch main \
-			--git-hide-branch master 
+			--git-hide-branch master
 
 	promptfessional end
 	promptfessional literal " "

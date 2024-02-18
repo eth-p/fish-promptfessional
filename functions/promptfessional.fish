@@ -1,4 +1,4 @@
-# Promptfessional | Copyright (C) 2021 eth-p
+# Promptfessional | Copyright (C) 2021-2024 eth-p
 # Your flexible and highly-customizable fish shell prompt.
 #
 # Documentation: https://github.com/eth-p/fish-promptfessional/tree/master/docs
@@ -75,7 +75,7 @@ function __promptfessional_fn_enable --description "Enables a prompt feature."
 		case "arrow"
 			set -g __promptfessional_section_arrow_symbol (printf "\uE0B0")
 			set -g __promptfessional_section_arrow_begin true
-			
+
 		case "timing"
 			function __promptfessional_render_component
 				printf "TIMINGS FOR PROMPT COMPONENT: %s\n" "$argv[1]" 1>&2
@@ -114,7 +114,7 @@ function __promptfessional_fn_color --description "Gets or sets a prompt color."
 	set -l value $argv[2..-1]
 	set -l color
 	eval "set color \$__promptfessional_colors__$name"
-	
+
 	# If --set-default is passed and the color is defined, return.
 	if [ -n "$_flag_set_default" ] && [ -n "$color" ]
 		return
@@ -130,7 +130,7 @@ function __promptfessional_fn_color --description "Gets or sets a prompt color."
 			end
 			return 1
 		end
-	
+
 		# If we're only trying to get the foreground/background/attributes, run it through
 		# the color extraction function.
 		if [ -n "$_flag_only_foreground$_flag_only_background$_flag_only_attributes" ]
@@ -165,10 +165,10 @@ end
 
 function __promptfessional_util_ansi_extract --description "Extracts ANSI Colors from a string."
 	argparse 'last' 'first' 'foreground' 'background' 'sequences' 'unrendered' -- $argv
-	
+
 	set -l text $argv[1]
 	set -l regex
-	
+
 	# Determine which regex to use.
 	if [ -n "$_flag_foreground" ]
 		set regex '\x1B\[(?:\d)*((?:3|9)(?:[0-79]|(?:8;(?:5;\d+|(?:2;\d+;\d+;\d+)))))[\d;]*m'
@@ -180,7 +180,7 @@ function __promptfessional_util_ansi_extract --description "Extracts ANSI Colors
 		echo "promptfessional util ansi_extract: requires --foreground or --background" 1>&2
 		return 2
 	end
-	
+
 	# Determine whether to get the first or last match.
 	if [ -n "$_flag_first" ]
 		set regex "^.*?$regex"
@@ -190,13 +190,13 @@ function __promptfessional_util_ansi_extract --description "Extracts ANSI Colors
 		echo "promptfessional util ansi_extract: requires --first or --last" 1>&2
 		return 2
 	end
-	
+
 	# Perform the match.
 	set -l matches (string match --regex -- "$regex" "$text")
 	if [ $status -ne 0 ]
 		return 1
 	end
-	
+
 	# Print the result.
 	if [ -n "$_flag_sequences" ]
 		if [ -n "$_flag_unrendered" ]
@@ -211,18 +211,18 @@ function __promptfessional_util_ansi_extract --description "Extracts ANSI Colors
 			printf "\x1B[%sm" "$matches[2]"
 		end
 	end
-	
+
 	return 0
 end
 
 
 function __promptfessional_util_seq --description "A faster version of the seq command."
 	argparse 'step=' -- $argv
-	
+
 	set -l start $argv[1]
 	set -l finish $argv[2]
 	[ -n "$_flag_step" ] || set _flag_step 1
-	
+
 	while [ $start -le $finish ]
 		echo $start
 		set start (math $start + $_flag_step)
@@ -231,32 +231,32 @@ end
 
 function __promptfessional_util_template --description "Replaces template variables."
 	argparse 'this-is-reserved' -- $argv
-	
+
 	set -l template $argv[1]
 	set -l index
-	
+
 	# Escape backslashes in the template.
 	set template (string replace --all -- "\\" "\\\\" "$template")
-	
+
 	# Fill in template variables.
 	for index in (promptfessional util seq 2 (count $argv) --step=2)
 		set -l var (string replace --all -- "." "\\." $argv[$index])
 		set -l val $argv[(math $index + 1)]
 		set -l val (string replace --all --regex -- "([\\\${])" "\\\\\$1" $argv[(math $index + 1)])
-		
+
 		set -l replacement "\${1}$val\${3}"
 		if [ -z "$val" ]
 			# If the value is empty, discard the padding symbols.
 			set replacement ""
 		end
-		
+
 		set template (
 			string replace --all --regex -- \
 				"(?!\\\\)\{([^a-zA-Z0-9_]*)($var)([^a-zA-Z0-9_]*)\}" "$replacement" \
 				"$template"
 		)
 	end
-	
+
 	echo "$template"
 end
 
@@ -270,12 +270,12 @@ function _promptfessional_var_cache --no-scope-shadowing --description "Caches v
 		echo "promptfessional util cache: missing option --cache-namespace" 1>&2
 		return 2
 	end
-	
+
 	if [ -z "$_flag_cache_key" ]
 		echo "promptfessional util cache: missing option --cache-key" 1>&2
 		return 2
 	end
-	
+
 	# If --update-cache is set, update the cache.
 	if [ -n "$_flag_update_cache" ]
 		# Set the variables.
@@ -340,11 +340,11 @@ function __promptfessional_end_section --description "Prints the current section
 	&& [ (string sub --start=-1 -- "$text_no_ansi") = " " ]
 		set pattern (string sub --length=(math (string length -- "$pattern") - 1) -- "$pattern")
 	end
-	
+
 	# Print the powerline arrow if enabled.
 	if [ -n "$__promptfessional_section_arrow_symbol" ]
 		set -l arrow_color ""
-		
+
 		# Get the current section's initial background color.
 		# First, we'll try to parse out an ANSI background color escape sequence.
 		set -l text_background (promptfessional util ansi_extract --first --background --unrendered -- "$text")
@@ -353,7 +353,7 @@ function __promptfessional_end_section --description "Prints the current section
 			switch "$text_background"
 				case "4*"
 					set arrow_color (printf "\x1B[7;3%sm" (string sub --start=2 -- "$text_background"))
-					
+
 				case "10*"
 					set arrow_color (printf "\x1B[7;9%sm" (string sub --start=3 -- "$text_background"))
 			end
@@ -380,7 +380,7 @@ function __promptfessional_end_section --description "Prints the current section
 				"$reset"
 		end
 	end
-	
+
 	# If the section text begins with a background color, apply that to the start of the section.
 	set -l first_bg (
 		promptfessional util ansi_extract --first --background -- \

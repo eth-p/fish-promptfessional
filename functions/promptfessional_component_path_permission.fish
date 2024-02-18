@@ -18,28 +18,28 @@ function promptfessional_component_path_permission --description "Promptfessiona
 	[ -n "$_flag_symbol_no_write" ] || set _flag_symbol_no_write '[ro]'
 
 	set -l pwd (pwd)
-	
+
 	# Check unreadable.
 	if ! [ -r "$pwd" ]
 		promptfessional color component.path_permission.no_read --or component.path_permission
 		printf "%s" "$_flag_symbol_no_read"
 		return 0
 	end
-	
+
 	# Check unwritable.
 	if ! [ -w "$pwd" ]
 		promptfessional color component.path_permission.no_write --or component.path_permission
 		printf "%s" "$_flag_symbol_no_write"
 		return 0
 	end
-	
+
 	# Print default if --always.
 	if [ -n "$_flag_always" ]
 		promptfessional color component.path_permission
 		printf "%s" "$_flag_symbol"
 		return 0
 	end
-	
+
 	return 1
 end
 

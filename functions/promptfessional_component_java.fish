@@ -10,7 +10,7 @@
 function promptfessional_component_java
 	argparse pattern= show-default -- $argv
 	set -l java_version
-	
+
 	# Don't display the component if not inside a virtual environment.
 	if [ -z "$_flag_show_default" ] && [ -z "$JAVA_HOME" ]
 		return 1
@@ -21,7 +21,7 @@ function promptfessional_component_java
 		--cache-namespace="promptfessional_component_java" \
 		--cache-key="JAVA_HOME=$JAVA_HOME" \
 		java_version
-		
+
 		set -l java_bin "java"
 		if [ -n "$JAVA_HOME" ]
 			set java_bin "$JAVA_HOME/bin/java"
@@ -39,7 +39,7 @@ function promptfessional_component_java
 			--cache-key="JAVA_HOME=$JAVA_HOME" \
 			java_version
 	end
-	
+
 	# Render the component.
 	[ -n "$_flag_pattern" ] || set _flag_pattern 'java {version}'
 	promptfessional color "component.java.$java_version" --or component.java

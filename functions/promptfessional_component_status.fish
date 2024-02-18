@@ -11,7 +11,7 @@
 function promptfessional_component_status --description "Promptfessional Component: Status"
 	argparse -i 'always' 'with-code' 'symbol=' -- $argv
 	[ -n "$_flag_symbol" ] || set _flag_symbol '!'
-	
+
 	# Ensure that __promptfessional_last_interactive_status is defined.
 	[ -n "$__promptfessional_last_interactive_status" ] || set -g __promptfessional_last_interactive_status 0
 

@@ -24,14 +24,14 @@ function promptfessional_decoration_git
 	return 0
 		return 1
 	end
-	
+
 	argparse -i 'git-hide-branch=+' 'git-use-cache' 'git-long-hash' \
 		'git-pattern-merge=' 'git-pattern-rebase=' \
 		'git-pattern-detached=' 'git-pattern-branch=' \
 		'git-symbol-branch=' 'git-symbol-head=' \
 		'git-symbol-staged=' 'git-symbol-unstaged=' \
 		-- $argv
-	
+
 	# Get info.
 	set -l git_head ""
 	set -l git_branch ""
@@ -45,7 +45,7 @@ function promptfessional_decoration_git
 	set -l git_staged false
 	set -l git_unstaged false
 	__promptfessional_git_info "$argv[1]" "$_flag_git_use_cache" || return 1
-	
+
 	# If the branch is one of the default branches, don't show the name.
 	set -l branch
 	set -l deco_branch "$git_branch"
@@ -54,7 +54,7 @@ function promptfessional_decoration_git
 			set deco_branch ""
 		end
 	end
-	
+
 	# Convert the long commit hash into a short one.
 	if [ -z "$_flag_git_long_hash" ]
 		set git_head (string sub --length=7 -- "$git_head")
@@ -67,13 +67,13 @@ function promptfessional_decoration_git
 	[ -n "$_flag_git_symbol_head" ]   || set _flag_git_symbol_head "➦ "
 	[ -n "$_flag_git_symbol_staged" ] || set _flag_git_symbol_staged "~"
 	[ -n "$_flag_git_symbol_unstaged" ] || set _flag_git_symbol_unstaged "*"
-	
+
 	# Set default patterns.
 	[ -n "$_flag_git_pattern_branch" ]   || set _flag_git_pattern_branch " {symbol}{branch}{status} "
 	[ -n "$_flag_git_pattern_detached" ] || set _flag_git_pattern_detached " {symbol}{head}{status} "
 	[ -n "$_flag_git_pattern_merge" ]    || set _flag_git_pattern_merge " {symbol}{branch_or_head }merge({merge_head}){status} "
 	[ -n "$_flag_git_pattern_rebase" ]   || set _flag_git_pattern_rebase " {symbol}{branch_or_head }rebase({rebase_head}|{rebase_todo}){status} "
-	
+
 	# Generate the "{symbol}" and "{branch_or_head}" pattern variables.
 	set -l deco_symbol "$_flag_git_symbol_branch"
 	set -l deco_branch_or_head "$git_branch"
@@ -81,12 +81,12 @@ function promptfessional_decoration_git
 		set deco_symbol "$_flag_git_symbol_head" 
 		set deco_branch_or_head "$git_head"
 	end
-	
+
 	# Generate the "{status}" pattern variable.
 	set -l deco_status ""
 	if $git_unstaged; set deco_status "$deco_status$_flag_git_symbol_unstaged"; end
 	if $git_staged;  set deco_status "$deco_status$_flag_git_symbol_staged"; end
-	
+
 	# Determine the correct pattern.
 	set -l pattern
 	if "$git_is_rebasing"
@@ -98,7 +98,7 @@ function promptfessional_decoration_git
 	else
 		set pattern "$_flag_git_pattern_detached"
 	end
-	
+
 	# Determine the color.
 	set -l color ""
 	if $git_unstaged
@@ -110,7 +110,7 @@ function promptfessional_decoration_git
 	else
 		set color (promptfessional color git.clean)
 	end
-	
+
 	# Fill out the pattern.
 	set pattern (
 		promptfessional util template -- "$pattern" \
@@ -124,10 +124,10 @@ function promptfessional_decoration_git
 			"rebase_todo" "$git_rebase_todo" \
 			"color" "$color"
 	)
-	
+
 	# Print the pattern.
 	printf "%s%s" "$color" "$pattern"
-	
+
 	return 0
 end
 
@@ -171,7 +171,7 @@ function __promptfessional_git_info --no-scope-shadowing
 	set -l __git_cachevars "git_conflict" "git_untracked" "git_staged" \
 		"git_unstaged" "git_head" "git_branch" "git_merge_head" \
 		"git_rebase_head" "git_rebase_todo" "git_is_rebasing" "git_is_merging"
-	
+
 	if [ "$argv[2]" = "--git-use-cache" ]
 		set -l __git_lastmod (stat -c "%Y" "$argv[1]" "$git_gitdir" 2>/dev/null || stat -f "%m" "$argv[1]" "$git_gitdir")
 		set __git_cachekey "$git_toplevel:$__git_lastmod"
@@ -181,7 +181,7 @@ function __promptfessional_git_info --no-scope-shadowing
 			return 0
 		end
 	end
-	
+
 	# Get the branch name, head revision, and status about rebase/merge. 	
 	set git_branch (git -C "$argv[1]" branch --show-current 2>/dev/null)
 	set git_head (git -C "$argv[1]" rev-parse HEAD 2>/dev/null)
@@ -200,7 +200,7 @@ function __promptfessional_git_info --no-scope-shadowing
 			set git_branch "$__git_rebase_branch[-1]"
 		end
 	end
-	
+
 	set git_merge_head (git -C "$argv[1]" rev-list -1 MERGE_HEAD 2>/dev/null)
 	if [ $status -eq 0 ]
 		set git_is_merging true
