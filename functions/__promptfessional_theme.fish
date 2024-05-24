@@ -34,6 +34,10 @@ function __promptfessional_theme
 		promptfessional color "$set" component.cmdtime '666666'
 		promptfessional color "$set" component.cmdtime.slow 'aa6666'
 		promptfessional color "$set" component.cmdtime.unit '888888'
+		promptfessional color "$set" component.datetime '555555'
+		promptfessional color "$set" component.datetime.extra '444444'
+		promptfessional color "$set" component.datetime.date '555555'
+		promptfessional color "$set" component.datetime.time '777777'
 
 		# Path
 		promptfessional color "$set" component.path '999999'
@@ -73,6 +77,10 @@ function __promptfessional_theme
 		promptfessional color "$set" component.cmdtime '333333'
 		promptfessional color "$set" component.cmdtime.slow 'aa3333'
 		promptfessional color "$set" component.cmdtime.unit '444444'
+		promptfessional color "$set" component.datetime '999999'
+		promptfessional color "$set" component.datetime.extra '777777'
+		promptfessional color "$set" component.datetime.date '999999'
+		promptfessional color "$set" component.datetime.time 'bbbbbb'
 
 		# Path
 		promptfessional color "$set" component.path '666666'

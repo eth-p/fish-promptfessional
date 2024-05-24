@@ -131,6 +131,7 @@ Check out the documentation for built-in components:
 ### Components
 
 - [cmdtime](docs/component_cmdtime.md)
+- [datetime](docs/component_datetime.md)
 - [docker](docs/component_docker.md)
 - [status](docs/component_status.md)
 - [sudo](docs/component_sudo.md)
