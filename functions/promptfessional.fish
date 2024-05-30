@@ -257,7 +257,7 @@ function __promptfessional_util_template --description "Replaces template variab
 		)
 	end
 
-	echo "$template"
+	printf "%s" "$template"
 end
 
 function _promptfessional_var_cache --no-scope-shadowing --description "Caches variables."
